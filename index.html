@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PokéLAN</title>
     <link rel="stylesheet" href="/home.css">
-    <script src="/index.js" defer></script>
-    <script src="/music.js" defer></script>
+    <script src="/index.js" type="module" defer></script>
+    <script src="/music.js" type="module" defer></script>
+    <link rel="stylesheet" href="/loader.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
@@ -85,11 +86,12 @@
             transition: transform 0.2s ease-in-out;
         }
     </style>
+    <script src="player.js" type="module" defer></script>
 </head>
 <body>
     <div id="poke-banners-container"></div>
     
-    <div id="nickname-modal" class="modal-container" style="display: none;">
+    <div id="nickname-modal" class="modal-container" style="display: flex;">
         <div id="nickname-modal-content" class="modal-card">
             <h1 class="blue-white-header">Enter your nickname</h1>
             <input type="text" id="nickname-input" placeholder="Nickname" style="padding: 10px; border-radius: 5px; border: 2px solid #3b4cca; width: 80%; margin-bottom: 20px; font-family: 'Pixelify Sans', sans-serif; font-size: 1rem; text-align: center;" required>
@@ -97,16 +99,16 @@
         </div>
     </div>
 
-    <div id="character-selection-modal" class="modal-container" style="display: flex;">
+    <div id="character-selection-modal" class="modal-container" style="display: none;">
         <div id="character-selection-modal-content" style="align-items:  center;" class="modal-card">
             <h1 class="blue-white-header">Choose Your Character</h1>
             <div style="flex-direction: row; display: flex; gap:2rem; justify-content: center; align-items: center;">
                 <br>
-                <div class="selection-card ping">
+                <div class="selection-card ping character-option" data-character-name="ASH">
                     <img src="/assets/ash.png" alt="ash" class="character-selection-image" >
                     Ash
                 </div>
-                <div class="selection-card ping">
+                <div class="selection-card ping character-option" data-character-name="GARY">
                     <img src="/assets/gary.png" alt="gary" class="character-selection-image">
                     Gary
                 </div>
@@ -117,12 +119,48 @@
     <div id="pokemon-selection-modal" class="modal-container" style="display: none;">
         <div id="pokemon-selection-modal-content" style="align-items:  center;" class="modal-card">
             <h1 class="blue-white-header">Choose Your Starter Pokemon</h1>
-            <div style="flex-direction: row; display: flex; gap:2rem; justify-content: center; align-items: center;" id="pokemon-starter-selector">
-                <div class="selection-card ping">
+            <div class="lds-dual-ring" id="pokemon-selector-loader"></div>
+            <div style="flex-direction: row; display: flex; gap:4rem; justify-content: center; align-items: center;" id="pokemon-starter-selector">
+                <div class="selection-card ping" id="selectionTemplate" style="display: none;">
                     <img src="/assets/ash.png" alt="ash" class="character-selection-image" >
-                    <h2>Ash</h2>
+                    <h2 class="blue-white-header">Ash</h2>
                 </div>
             </div>
+        </div>
+    </div>
+
+
+    <div id="welcome-modal" class="modal-container" style="display: none;">
+        <div id="welcome-modal-content" style="align-items:  center;" class="modal-card">
+            <h1 class="blue-white-header" id="welcome-header">Welcome tcan!</h1>
+            <div style="display: flex;flex-direction: row;gap:8rem;padding: 2rem;">
+                <div>
+                    <h4>Character:</h4>
+                    <img src="" alt="" class="character-selection-image" id="welcome-character">
+                </div>
+                <div>
+                    <h4>Team:</h4>
+                    <div style="display:flex;flex-wrap: wrap;" id="pokemon-team-container">
+                        <div id="pokemon-card-template" >
+                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" alt="ash" class="character-selection-image" >
+                            <div id="pokemon-name">Jigglypuff</div>
+                            <div id="pokemon-type">Jigglypuff</div>
+
+                            <div style="display: flex;flex-direction: row; gap:0.5rem; justify-content: center;">
+                                <img src="assets/heart.svg" alt="heart" class="character-selection-image" style="width: 1rem;height: 1rem;">
+                                <div id="pokemon-hp">100 HP</div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+            <button id="start-game-button" class="next-button">Start Game</button>
+
+
         </div>
     </div>
 

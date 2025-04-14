@@ -1,12 +1,12 @@
 class Music {
-    constructor(src) {
+    constructor(src,nonDefaults) {
         this.player = document.createElement("audio");
         this.mute = document.getElementById("mute");
         this.unmute = document.getElementById("unmute");
         this.control = document.getElementById("music-control");
         this.player.setAttribute('src', src);
         this.player.setAttribute('loop', 'loop');
-
+        this.nonDefaults = nonDefaults;
         this.mute.style.display = "";
         this.unmute.style.display = "none";
 
@@ -16,6 +16,23 @@ class Music {
     updateUI(isPlaying) {
         this.mute.style.display = isPlaying ? "" : "none";
         this.unmute.style.display = isPlaying ? "none" : "";
+    }
+
+    playNonDefault(idx) {
+        if(this.mute.style.display == "none") {
+            return;
+        }
+        console.log("HERE")
+        let tmp = this.player.src;
+        this.player.setAttribute('src', this.nonDefaults[idx]);
+        this.player.loop = false;
+        this.player.currentTime = 0;
+        this.player.play();
+        return function () {
+            this.player.setAttribute('src', tmp);
+            this.player.currentTime = 0;
+            this.player.play();
+        }
     }
 
     togglePlayer() {
@@ -44,6 +61,18 @@ class Pinger {
                 this.play();
             });
         }
+        const observer = new MutationObserver(() => {
+            const newElements = Array.from(document.querySelectorAll(`.${this.className}`));
+            for (let i = 0; i < newElements.length; i++) {
+                if (!newElements[i].hasListener) {
+                    newElements[i].addEventListener('mouseenter', () => {
+                        this.play();
+                    });
+                    newElements[i].hasListener = true;
+                }
+            }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
     }
     play() {
         this.player.currentTime = 0;
@@ -52,8 +81,5 @@ class Pinger {
 
 }
 
-const music = new Music('assets/music.mp3', 'mute', 'unmute', 'music-control');
-const ping = new Pinger('assets/bubble.mp3', 'ping');          
-// music.player.play();
-document.getElementById('music-control').addEventListener('click', music.togglePlayer);
+export {Music, Pinger};
 

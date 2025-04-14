@@ -1,14 +1,7 @@
 class Pokemon{
     constructor(code) {
         this.code = code;
-        this.hp = this.getHp(code);
-        this.atk = this.getAtk(code);
-        this.def = this.getDef(code);
-        this.spd = this.getSpd(code);
-        this.spAtk = this.getSpAtk(code);
-        this.spDef = this.getSpDef(code);
         this.hydrated=false
-        this.hydrateData()
     }
 
     async hydrateData() {
