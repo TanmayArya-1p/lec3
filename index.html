@@ -70,6 +70,20 @@
             font-size: 1rem; 
             text-shadow: 1px 1px #000;
         }
+        .character-selection-image {
+            width:auto; 
+            height: 7rem; 
+        }
+        .selection-card {
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .selection-card:hover {
+            transform: translateY(-0.5rem);
+            transition: transform 0.2s ease-in-out;
+        }
+        .selection-card {
+            transition: transform 0.2s ease-in-out;
+        }
     </style>
 </head>
 <body>
@@ -84,12 +98,33 @@
     </div>
 
     <div id="character-selection-modal" class="modal-container" style="display: flex;">
-        <div id="character-selection-modal-content" class="modal-card">
+        <div id="character-selection-modal-content" style="align-items:  center;" class="modal-card">
             <h1 class="blue-white-header">Choose Your Character</h1>
-            <button id="nickname-submit" class="next-button">Next</button>
+            <div style="flex-direction: row; display: flex; gap:2rem; justify-content: center; align-items: center;">
+                <br>
+                <div class="selection-card ping">
+                    <img src="/assets/ash.png" alt="ash" class="character-selection-image" >
+                    Ash
+                </div>
+                <div class="selection-card ping">
+                    <img src="/assets/gary.png" alt="gary" class="character-selection-image">
+                    Gary
+                </div>
+            </div>
         </div>
     </div>
 
+    <div id="pokemon-selection-modal" class="modal-container" style="display: none;">
+        <div id="pokemon-selection-modal-content" style="align-items:  center;" class="modal-card">
+            <h1 class="blue-white-header">Choose Your Starter Pokemon</h1>
+            <div style="flex-direction: row; display: flex; gap:2rem; justify-content: center; align-items: center;" id="pokemon-starter-selector">
+                <div class="selection-card ping">
+                    <img src="/assets/ash.png" alt="ash" class="character-selection-image" >
+                    <h2>Ash</h2>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="music-control">
         <div id="music-controller-div">

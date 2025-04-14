@@ -30,3 +30,5 @@ for(let i = 0; i < bannerCount; i++) {
     }
     bannerContainer.appendChild(banner);
 }
+
+
