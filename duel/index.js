@@ -14,23 +14,20 @@ if(!player){
     window.location.href="/"
 }
 
+
+document.getElementById('logout-button').addEventListener('click', async function () {
+    if (confirm("Are you sure you want to log out?. All your data will get wiped out with this account if you logout")) {
+        await Player.clearState();
+        window.location.href = "/";
+    }
+})
+
 let bs=new BattleSimulator(player.getPokemon(0), player.getPokemon(0), "battle-arena");
 bs.draw()
 bs.setPlayer(player)
 bs.setOpponent(player)
 await bs.initMoves()
-setTimeout(() => {
-    bs.attackAway(0)
-}, 1000)
-setTimeout(() => {
-    bs.attackHome(2)
-}, 2000)
-setTimeout(() => {
-    bs.attackAway(0)
-}, 3000)
-setTimeout(() => {
-    bs.attackHome(2)
-}, 4000)
+
 
 initNavbar(player)
 document.getElementById('player-name').innerText = player.nickname;

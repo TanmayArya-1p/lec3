@@ -110,8 +110,7 @@ async function loadPokemons() {
         pokemonElement.addEventListener('click', async function () {
                 const player = new Player(playerNickname, playerCharacter, []);
                 player.addPokemon(pokemon);
-                player.addPokemon(pokemon);
-                player.saveState();
+                    player.saveState();
                 displayWelcomeModal(player);
             }
         );
