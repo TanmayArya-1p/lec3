@@ -135,13 +135,14 @@
             <h1 class="blue-white-header" id="welcome-header">Welcome tcan!</h1>
             <div style="display: flex;flex-direction: row;gap:8rem;padding: 2rem;">
                 <div>
-                    <h4>Character:</h4>
+                    <h2>Character:</h2>
                     <img src="" alt="" class="character-selection-image" id="welcome-character">
+                    <h3 class="blue-white-header" id="character-name-welcome-modal"></h3>
                 </div>
                 <div>
-                    <h4>Team:</h4>
-                    <div style="display:flex;flex-wrap: wrap;" id="pokemon-team-container">
-                        <div id="pokemon-card-template" >
+                    <h2>Team:</h2>
+                    <div style="display:flex;flex-wrap: wrap;gap:1rem; max-width: 35rem; justify-content: center;" id="pokemon-team-container">
+                        <div id="pokemon-card-template" style="display: none;">
                             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" alt="ash" class="character-selection-image" >
                             <div id="pokemon-name">Jigglypuff</div>
                             <div id="pokemon-type">Jigglypuff</div>

@@ -2,12 +2,12 @@ import Player from './player.js';
 import {ASH, GARY} from './consts.js';
 import Pokemon from './pokemon.js';
 import {Music, Pinger} from './music.js';
-
+import initBanners from './banners.js';
 
 initBanners()
 
 const music = new Music('assets/music.mp3', ["assets/happy.mp3"])
-const ping = new Pinger('assets/bubble.mp3', 'ping');          
+new Pinger('assets/bubble.mp3', 'ping');          
 // music.player.play();
 document.getElementById('music-control').addEventListener('click', music.togglePlayer);
 document.getElementById('start-game-button').addEventListener('click', () => startGameHandler());
@@ -23,6 +23,19 @@ function startGameHandler() {
 
 let playerNickname = ""
 let playerCharacter = ""
+
+
+function checkAuth() {
+    if(!Player.isNew()) {
+        let player = Player.loadState()
+        playerNickname = player.nick;
+        playerCharacter = player.char;
+        displayWelcomeModal(player);
+    }
+}
+
+
+await checkAuth()
 
 
 document.getElementById('nickname-submit').addEventListener('click', function () {
@@ -41,6 +54,33 @@ document.querySelectorAll(`.character-option`).forEach(option => {
         await loadPokemons()
     })
 });
+
+
+async function displayWelcomeModal(player) {
+    document.getElementById('pokemon-selection-modal').style.display = 'none';
+    document.getElementById('nickname-modal').style.display = 'none';
+    document.getElementById('character-selection-modal').style.display = 'none';
+
+    document.getElementById('welcome-modal').style.display = 'flex';
+    document.getElementById('welcome-header').innerText = 'Welcome ' +player.nick + '!';
+    document.getElementById('welcome-character').src = `/assets/${player.char.toLowerCase()}.png`;
+    document.getElementById('welcome-character').alt = player.char;
+    document.getElementById('character-name-welcome-modal').innerText = player.nick;
+
+
+    let pokemonTeamContainer  = document.getElementById('pokemon-team-container');
+    for(let i=0; i<player.team.length; i++){
+        let pokemonCard = document.getElementById('pokemon-card-template').cloneNode(true);
+        pokemonCard.style.display = 'block';
+        pokemonCard.querySelector('img').src = player.team[i].sprites.front_default;
+        pokemonCard.querySelector('img').alt = player.team[i].name;
+        pokemonCard.querySelector('#pokemon-name').innerText = player.team[i].name;
+        pokemonCard.querySelector('#pokemon-type').innerText = player.team[i].types.map(type => type.name).join(', ');
+        pokemonCard.querySelector('#pokemon-hp').innerText = player.team[i].stats.hp;
+        pokemonTeamContainer.appendChild(pokemonCard);
+    }
+}
+
 
 async function loadPokemons() {
     const pokemons = [];
@@ -70,22 +110,9 @@ async function loadPokemons() {
         pokemonElement.addEventListener('click', async function () {
                 const player = new Player(playerNickname, playerCharacter, []);
                 player.addPokemon(pokemon);
+                player.addPokemon(pokemon);
                 player.saveState();
-                document.getElementById('pokemon-selection-modal').style.display = 'none';
-                document.getElementById('welcome-modal').style.display = 'flex';
-                document.getElementById('welcome-header').innerText = 'Welcome ' +playerNickname + '!';
-                document.getElementById('welcome-character').src = `/assets/${playerCharacter.toLowerCase()}.png`;
-                document.getElementById('welcome-character').alt = playerCharacter;
-                
-                let pokemonCard = document.getElementById('pokemon-card-template')
-                pokemonCard.style.display = 'block';
-                pokemonCard.querySelector('img').src = pokemon.sprites.front_default;
-                pokemonCard.querySelector('img').alt = pokemon.name;
-
-                pokemonCard.querySelector('#pokemon-name').innerText = pokemon.name;
-                pokemonCard.querySelector('#pokemon-type').innerText = pokemon.types.map(type => type.name).join(', ');
-                pokemonCard.querySelector('#pokemon-hp').innerText = pokemon.stats.hp;  
-
+                displayWelcomeModal(player);
             }
         );
         pokemonElement.style.display= 'block';
@@ -97,44 +124,6 @@ async function loadPokemons() {
         pokemonSelectionContainer.appendChild(pokemonElement);
     }   
     document.getElementById('pokemon-selector-loader').style.display = "none";
-}
-
-
-
-
-function initBanners() {
-    const bannerCount = 10;
-    const imageCount = 12;
-    const bannerContainer = document.getElementById('poke-banners-container')
-    
-    const bannerTemplate = document.createElement('div');
-    bannerTemplate.className = 'poke-banner';
-    const bannerInnerTemplate = document.createElement('div');
-    bannerInnerTemplate.className = 'poke-banner-inner';
-    const logoTemplate = document.createElement('img');
-    logoTemplate.src = '/assets/pokemon-logo.svg';
-    logoTemplate.alt = 'PokeLAN Logo';
-    logoTemplate.className = 'poke-logo';
-    
-    for(let i = 0; i < 2*imageCount; i++) {
-        bannerInnerTemplate.appendChild(logoTemplate.cloneNode(true));
-    }
-    
-    bannerTemplate.appendChild(bannerInnerTemplate);
-    
-    
-    for(let i = 0; i < bannerCount; i++) {
-        const banner = bannerTemplate.cloneNode(true);
-        
-        if(i % 2 == 0) {
-            banner.style.backgroundColor = '#ff0000';
-            banner.classList.add('right-scroll');
-        } else {
-            banner.style.backgroundColor = '#cc0000';
-            banner.classList.add('left-scroll');
-        }
-        bannerContainer.appendChild(banner);
-    }    
 }
 
 
