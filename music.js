@@ -28,10 +28,10 @@ class Music {
         this.player.loop = false;
         this.player.currentTime = 0;
         this.player.play();
-        return function () {
-            this.player.setAttribute('src', tmp);
-            this.player.currentTime = 0;
-            this.player.play();
+        return function (musicPlayer) {
+            musicPlayer.player.setAttribute('src', tmp);
+            musicPlayer.player.currentTime = 0;
+            musicPlayer.player.play();
         }
     }
 

@@ -1,4 +1,4 @@
-
+import { offerReward } from "../rewards.js";
 
 class BattlePokemon {
     constructor(pokemon) {
@@ -66,9 +66,16 @@ class BattlePokemon {
 
 
 class BattleSimulator {
-    constructor(homePokemon, awayPokemon , canvasID) {
+    constructor(homePokemon, awayPokemon , canvasID,music,endGameCallback=null,enemyMoveCallback=null) {
+        this.enemyMoveCallback = enemyMoveCallback;
         this.homePokemon = new BattlePokemon(homePokemon);
         this.awayPokemon = new BattlePokemon(awayPokemon);
+
+        this.music = music;
+        this.musicResetCallback = this.music.playNonDefault(1);
+        
+        
+        this.endGameCallback = endGameCallback;
 
         this.homePlayer = null;
         this.awayPlayer = null;
@@ -77,6 +84,7 @@ class BattleSimulator {
         this.canvas.height = 500;   
 
         this.isHomeTurn = true
+        this.concluded = false
         
         this.homePlayerCard = document.getElementById('player-1-card');
         this.awayPlayerCard = document.getElementById('player-2-card');
@@ -85,6 +93,7 @@ class BattleSimulator {
         this.battleLogContainer = document.getElementById('battle-log-container');
     }
     async initMoves() {
+
         await this.homePokemon.hydrateMoves();
         await this.awayPokemon.hydrateMoves();
     }
@@ -102,6 +111,7 @@ class BattleSimulator {
         this.awayPlayerCard.querySelector('h2').innerText = opponent.nick;
     }
     addBattleLog(entry,issuer="home") {
+
         let newNode = null;
         let nameMap = {
             "home": this.homePlayer.nick,
@@ -122,35 +132,74 @@ class BattleSimulator {
         this.battleLog = [];
     }
     attackAway(moveIDX) {
-        if(!this.isHomeTurn) {
+        if(!this.isHomeTurn || this.concluded) {
             console.error("WRONG TURN");
             return;
         }
         const damage = this.homePokemon.attack(this.awayPokemon, this.awayPokemon.pokemon.moves[moveIDX]);
         this.addBattleLog(`${this.homePokemon.pokemon.name} used ${this.awayPokemon.pokemon.moves[moveIDX].name} on ${this.awayPokemon.pokemon.name} for ${damage} damage.` , "home");
         console.log(this.battleLog)
+
+        this.isHomeTurn = !this.isHomeTurn;
+
+        if(this.enemyMoveCallback) {
+            this.enemyMoveCallback(this);
+        }
         if (this.awayPokemon.isFainted()) {
             this.addBattleLog(`${this.awayPokemon.pokemon.name} fainted!` , "away");
             console.log("home wins")
+            this.draw().then(()=>this.conclude("home"))
         }
-        this.isHomeTurn = !this.isHomeTurn;
-        this.draw();
+        else{
+            this.draw();
+        }
     }
     attackHome(moveIDX) {
-        if(this.isHomeTurn) {
+        if(this.isHomeTurn || this.concluded) {
             console.error("WRONG TURN");
             return;
         }
         const damage = this.awayPokemon.attack(this.homePokemon, this.homePokemon.pokemon.moves[moveIDX]);
         this.addBattleLog(`${this.homePokemon.pokemon.name} used ${this.awayPokemon.pokemon.moves[moveIDX].name} on ${this.awayPokemon.pokemon.name} for ${damage} damage.`,"away");
+
+        this.isHomeTurn = !this.isHomeTurn;
+        ;
         if (this.homePokemon.isFainted()) {
             this.addBattleLog(`${this.homePokemon.pokemon.name} fainted!` , "home");
             console.log("away wins")
+            this.draw().then(()=>this.conclude("away"))
+        } else{
+            this.draw();
         }
-        this.isHomeTurn = !this.isHomeTurn;
-        this.draw();
     }
-    draw() {
+    conclude(winner){
+        this.concluded = true;
+        if(winner == "home") {
+            this.addBattleLog(`${this.homePlayer.nick} wins!`, "home");
+            this.music.playNonDefault(0)
+        } else {
+            this.addBattleLog(`${this.awayPlayer.nick} wins!`, "away");
+        }
+        let ctx = this.canvas.getContext('2d');
+
+        ctx.font = 'bold 100px Pixelify Sans';        
+        ctx.fillStyle = winner === "home" ? "blue" : "red";
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const message = winner === "home" ? "You Win!" : "You Lose!";
+        ctx.fillText(message, this.canvas.width / 2, this.canvas.height / 2);
+        setTimeout(()=>{
+            document.getElementById('battle-sim').style.display='none'
+            this.musicResetCallback(this.music)
+            offerReward(this.homePlayer)
+
+        },7000)
+
+    }
+    async draw() {
+        if(this.concluded) {
+            return;
+        }
         const ctx = this.canvas.getContext('2d');
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -158,19 +207,26 @@ class BattleSimulator {
         const homeImg = new Image();
         homeImg.src = this.homePokemon.pokemon.sprites.back_default;
         homeImg.addEventListener('load', () => {
+            if(this.concluded) {
+                return;
+            }
             ctx.drawImage(homeImg, 230, this.canvas.height - 240, 150, 150);
         });
 
         const awayImg = new Image();
         awayImg.src = this.awayPokemon.pokemon.sprites.front_default;
         awayImg.addEventListener('load', () => {
+            if(this.concluded) {
+                return;
+            }
             ctx.drawImage(awayImg, this.canvas.width - 364, 150, 150, 150);
         }); 
-
         if (this.battleLog.length > 0) {
             ctx.fillStyle = 'black';
             ctx.font = 'bold 24px Pixelify Sans';
-            ctx.fillText(this.battleLog[this.battleLog.length - 1], 160, 60);
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.battleLog[this.battleLog.length - 1], this.canvas.width / 2, 60);
         }
 
 
@@ -201,7 +257,7 @@ class BattleSimulator {
         ctx.fillStyle = 'black';
         ctx.font = '20px Pixelify Sans';
         ctx.fillText(this.homePokemon.pokemon.name, this.canvas.width - 440 , 320);
-
+        return 0;
     }
 }
 

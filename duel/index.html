@@ -7,10 +7,20 @@
     <script src="/duel/index.js" type="module" defer></script>
     <script src="../music.js" type="module" defer></script>
     <script src="/duel/navbar.js" type="module" defer></script>
-
+    <link rel="stylesheet" href="../loader.css">
     <title>PokéLAN</title>
 </head>
 <style>
+    .selection-card {
+        display: flex; flex-direction: column; align-items: center;
+    }
+    .selection-card:hover {
+        transform: translateY(-0.5rem);
+        transition: transform 0.2s ease-in-out;
+    }
+    .selection-card {
+        transition: transform 0.2s ease-in-out;
+    }
     #music-control {
         position: fixed;
         bottom: 20px;
@@ -41,6 +51,26 @@
         background-color: #f0f0f0;
         margin: 0;
         padding: 0;
+    }
+    .modal-container {
+        display: none;  
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-card  {
+        background-color: #ffde00;
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        border: 0.2rem solid #3b4cca;
     }
     #navbar {
         display: flex;
@@ -120,6 +150,14 @@
         background-color: #3b4ccaf3;
         transition: background-color 0.2s ease;
     }
+    #battle-sim {
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+        gap:1rem;
+        height:100vh; 
+        margin-top: 2rem;
+    }
 
     </style>
 <body>
@@ -138,8 +176,7 @@
         </div>
 
     </nav>
-    <div style="display: flex;flex-direction: column; align-items: center;gap:1rem;height:100vh; margin-top: 2rem;">
-
+    <div id="battle-sim">
 
         <div id="battle-container">
             <div id="player-1-card" class="blue-white-header player-card">
@@ -179,6 +216,20 @@
         </div>
 
 
+    </div>
+
+    <div id="pokemon-selection-modal" class="modal-container" style="display: none;">
+        <div id="pokemon-selection-modal-content" style="align-items:  center;" class="modal-card">
+            <h1 class="blue-white-header">Choose a Pokémon as your Reward!</h1>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;"></div>
+            <div class="lds-dual-ring" id="pokemon-selector-loader"></div>
+            <div style="flex-direction: row; display: flex; gap:4rem; justify-content: center; align-items: center;" id="pokemon-starter-selector">
+                <div class="selection-card ping" id="selectionTemplate" style="display: none;">
+                    <img src="/assets/ash.png" alt="ash" class="character-selection-image" >
+                    <h2 class="blue-white-header">Ash</h2>
+                </div>
+            </div>
+        </div>
     </div>
 
 
