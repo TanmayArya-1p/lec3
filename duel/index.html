@@ -35,14 +35,12 @@
         padding: 0;
         width: 100%;
         height: 100%;
-        overflow: hidden;
     }
     body {
         font-family: 'Pixelify Sans', sans-serif;
         background-color: #f0f0f0;
         margin: 0;
         padding: 0;
-        overflow: hidden;
     }
     #navbar {
         display: flex;
@@ -95,7 +93,21 @@
         justify-content: space-around;
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
     }
-
+    #battle-log {
+        width: 40%; 
+        height: 14rem; 
+        background-color: antiquewhite; 
+        border-radius: 10px; 
+        padding-inline: 1rem; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        font-family: 'Pixelify Sans', sans-serif;
+    }
+    #battle-accessories {
+        display: flex; 
+        flex-direction: row; 
+        width:60%;
+        gap: 2rem;
+    }
 
     </style>
 <body>
@@ -111,7 +123,7 @@
 
         </div>
     </nav>
-    <div style="display: flex;flex-direction: column; align-items: center;gap:2rem;height:100vh; margin-top: 2rem;">
+    <div style="display: flex;flex-direction: column; align-items: center;gap:1rem;height:100vh; margin-top: 2rem;">
 
 
         <div id="battle-container">
@@ -129,10 +141,26 @@
             </div>
 
             <div id="player-2-card" class="blue-white-header player-card">
-                <h2 style="text-align: center;"></h2>                
+                <h2 style="text-align: center;color: #ff0000;"></h2>                
                 <img src="../assets/gary.png" alt="Gary" class="character-selection-image" style="width: 8rem; height: auto;">
             </div>
 
+        </div>
+
+        <div id="battle-accessories" style="display: flex; flex-direction: row; gap: 2rem;">
+            <div id="battle-log" >
+                <h2>Battle Log</h2>
+                <div style="max-height: 8rem; overflow-y: auto;" id="battle-log-container">
+                    <div style="color: #3b4cca; margin-bottom: 0.5rem;" id="player-log-template" style="display: none;">
+                    </div>
+                    <div style="color: #ff0000; margin-bottom: 0.5rem;" id="opponent-log-template" style="display: none;">
+                    </div>
+                </div>
+            </div>
+            <div id="battle-controls" style="display: flex; flex-direction: row; gap: 2rem;">
+
+
+            </div>
         </div>
 
 

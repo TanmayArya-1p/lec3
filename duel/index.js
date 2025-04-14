@@ -18,6 +18,19 @@ let bs=new BattleSimulator(player.getPokemon(0), player.getPokemon(0), "battle-a
 bs.draw()
 bs.setPlayer(player)
 bs.setOpponent(player)
+await bs.initMoves()
+setTimeout(() => {
+    bs.attackAway(0)
+}, 1000)
+setTimeout(() => {
+    bs.attackHome(2)
+}, 2000)
+setTimeout(() => {
+    bs.attackAway(0)
+}, 3000)
+setTimeout(() => {
+    bs.attackHome(2)
+}, 4000)
 
 initNavbar(player)
 document.getElementById('player-name').innerText = player.nickname;
