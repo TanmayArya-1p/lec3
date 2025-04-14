@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <script src="/duel/index.js" type="module" defer></script>
+    <script src="../music.js" type="module" defer></script>
+    <script src="/duel/navbar.js" type="module" defer></script>
+
+    <title>PokéLAN</title>
+</head>
+<style>
+    #music-control {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 1000;
+        cursor: pointer;
+    }
+    #music-controller-div {
+        background-color: rgba(255, 255, 255, 0.441); border-radius: 10px; width:2.5rem;height:2.5rem;padding:0.8rem;
+
+    }
+    #music-controller-div:hover {
+        transform: translateY(-0.5rem);
+        transition: transform 0.2s ease-in-out;
+    }
+    #music-controller-div {
+        transition: transform 0.2s ease-in-out;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    body {
+        font-family: 'Pixelify Sans', sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    #navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: 	#ff0000;
+        padding: 10px;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .blue-white-header {
+        margin-bottom: 2rem; color: #3b4cca; text-shadow: 1px 1px #fff;
+    }
+
+    </style>
+<body>
+    <nav id="navbar">
+        <div style="display: flex; align-items: center;">
+            <a href="/duel">
+                <img src="/assets/pokelan.png" alt="PokéLAN Logo" style="height: 4rem;">
+            </a>
+        </div>
+        <div style="display: flex;flex-direction: row; margin-right: 2rem; align-items: center;justify-content: center;gap:2rem">
+            <div id="player-name" class="blue-white-header" style="font-size: 1.5rem;margin-top: 1rem;"></div>
+            <img id="player-character">
+
+        </div>
+    </nav>
+
+    <div>
+        Welcome to PokéLAN Duel Mode! Here you can battle against other players in the same local network as you.
+    </div>
+
+    <div id="music-control">
+        <div id="music-controller-div">
+            <img src="/assets/unmute.svg" alt="mute" id="mute" style="display:none">
+            <img src="/assets/mute.svg" alt="unmute" id="unmute" style="display:none">
+
+        </div>
+    </div>
+</body>
+</html>
