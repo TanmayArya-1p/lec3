@@ -4,6 +4,7 @@ import Pokemon from './pokemon.js';
 import {Music, Pinger} from './music.js';
 import initBanners from './banners.js';
 import { offerReward } from './rewards.js';
+import { displaySummaryModal } from './utils.js';
 
 initBanners()
 
@@ -31,7 +32,7 @@ function checkAuth() {
         let player = Player.loadState()
         playerNickname = player.nick;
         playerCharacter = player.char;
-        displayWelcomeModal(player);
+        displaySummaryModal(player);
     }
 }
 
@@ -54,36 +55,6 @@ document.querySelectorAll(`.character-option`).forEach(option => {
         document.getElementById('pokemon-selection-modal').style.display = 'flex';
         let player = new Player(playerNickname, playerCharacter, []);
         player.saveState();
-        await offerReward(player , () => displayWelcomeModal(player));
+        await offerReward(player , () => displaySummaryModal(player));
     })
 });
-
-
-async function displayWelcomeModal(player,modal=true) {
-    if(modal) {
-        document.getElementById('pokemon-selection-modal').style.display = 'none';
-        document.getElementById('nickname-modal').style.display = 'none';
-        document.getElementById('character-selection-modal').style.display = 'none';
-    
-        document.getElementById('welcome-modal').style.display = 'flex';
-        document.getElementById('welcome-header').innerText = 'Welcome ' +player.nick + '!';
-    }
-
-    document.getElementById('welcome-character').src = `/assets/${player.char.toLowerCase()}.png`;
-    document.getElementById('welcome-character').alt = player.char;
-    document.getElementById('character-name-welcome-modal').innerText = player.nick;
-    document.getElementById('character-name-welcome-modal').innerText = player.nick + '\n' + "(XP: "+player.xp+")";
-
-
-    let pokemonTeamContainer  = document.getElementById('pokemon-team-container');
-    for(let i=0; i<player.team.length; i++){
-        let pokemonCard = document.getElementById('pokemon-card-template').cloneNode(true);
-        pokemonCard.style.display = 'block';
-        pokemonCard.querySelector('img').src = player.team[i].sprites.front_default;
-        pokemonCard.querySelector('img').alt = player.team[i].name;
-        pokemonCard.querySelector('#pokemon-name').innerText = player.team[i].name;
-        pokemonCard.querySelector('#pokemon-type').innerText = player.team[i].types.map(type => type.name).join(', ');
-        pokemonCard.querySelector('#pokemon-hp').innerText = player.team[i].stats.hp;
-        pokemonTeamContainer.appendChild(pokemonCard);
-    }
-}

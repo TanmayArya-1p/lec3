@@ -1,5 +1,12 @@
 const ASH = 'ASH';
 const GARY = 'GARY';
-const BROCK = 'BROCK';
 
-export {ASH, GARY, BROCK};
+const trainerList = [ASH,GARY]
+const npcNames = ['Dusty', 'Gabe', 'Steve', 'Victor', 'Stan', 'Sam', 'Mike', 'Chris'];
+
+const offsetMap = {
+    ASH: 0,
+    GARY: 30
+}
+
+export {ASH, GARY , trainerList , npcNames , offsetMap};

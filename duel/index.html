@@ -121,6 +121,7 @@
         flex-direction: column; 
         display: flex; 
         justify-content: space-around;
+        align-items: center;
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
     }
     .aw-card {
@@ -292,11 +293,11 @@
 
     </div>
 
-    <div class="vc-div-contents" style="height: 100vh;margin-top: 2rem;gap: 2rem;">
+    <div id="duel-main-page" class="vc-div-contents" style="height: 100vh;margin-top: 2rem;gap: 2rem;">
         <a style="font-size: 1.5rem;text-align: center;">
             Welcome to PokéLAN Duel Mode! You can battle against other trainers on the same LAN or battle NPCs to gain XP and unlock new Pokémons.
         </a>
-        <div style="display: flex; flex-direction: row; align-items: center; gap: 1rem;width: 80%; justify-content: space-around;">
+        <div style="display: flex; flex-direction: row; gap: 1rem;width: 80%; justify-content: space-around;">
             <div style="display: flex;flex-direction: row;gap:8rem;padding: 2rem;" class="aw-card">
                 <div class="vc-div-contents">       
                     <h2>Character:</h2>
@@ -324,9 +325,9 @@
 
             </div>
 
-            <div class="aw-card vc-div-contents">
+            <div class="aw-card vc-div-contents" style="height: fit-content;">
                 <h2>Battle Options</h2>
-                <button class="attack-button">Battle an NPC</button>
+                <button class="attack-button" id="npc-battle-start">Battle an NPC</button>
             </div>
 
 
@@ -338,7 +339,7 @@
             <h1 class="blue-white-header">Choose a Pokémon as your Reward!</h1>
             <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;"></div>
             <div class="lds-dual-ring" id="pokemon-selector-loader"></div>
-            <div id="pokemon-starter-selector">
+            <div id="pokemon-starter-selector" style="flex-direction: row; display: flex; gap:4rem; justify-content: center; align-items: center;">
                 <div class="selection-card ping" id="selectionTemplate" style="display: none;">
                     <img src="/assets/ash.png" alt="ash" class="character-selection-image" >
                     <h2 class="blue-white-header">Ash</h2>

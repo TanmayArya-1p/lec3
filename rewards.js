@@ -1,24 +1,17 @@
-import {ASH,GARY} from "../consts.js";
+import {ASH,GARY,offsetMap} from "../consts.js";
 import Pokemon from "../pokemon.js";
-
 
 async function offerReward(player,callback=null) {
     player.xp += 50;
     player.saveState();
     const pokemons = [];
-    let offset = 0
-
-    if(player.char===ASH) {
-        offset = 0
-    } else if(player.char===GARY) {
-        offset = 30
-    }
+    let offset = offsetMap[player.char]
 
     for (let i = 1; i <= 3; i++) {
         let pokemonCode;
         do {
             pokemonCode = Math.floor(Math.random() * 30) + offset+1;
-        } while (pokemons.some(pokemon => pokemon.code === pokemonCode));
+        } while (pokemons.some(pokemon => pokemon.code === pokemonCode) || player.team.some(pokemon => pokemon.code === pokemonCode));      
         pokemons.push(new Pokemon(pokemonCode));
         await pokemons[i-1].hydrateData();
     }
@@ -32,16 +25,16 @@ async function offerReward(player,callback=null) {
         pokemonElement.id = `pokemon-${i}`;
         pokemonElement.addEventListener('click', async function () {
                 player.addPokemon(pokemon);
-                player.addPokemon(pokemon);
-
-                player.addPokemon(pokemon);
-
                 player.saveState();
                 document.getElementById("pokemon-selection-modal").style.display = 'none';
                 if(callback){
                     callback();
                 }
+                let tempTemplate = document.getElementById('selectionTemplate').cloneNode(true);
+                pokemonSelectionContainer.innerHTML = '';
+                pokemonSelectionContainer.appendChild(tempTemplate);
             }
+            
         );
         pokemonElement.style.display= 'block';
         const pokemonImage = pokemonElement.querySelector('img');
@@ -52,6 +45,7 @@ async function offerReward(player,callback=null) {
         pokemonSelectionContainer.appendChild(pokemonElement);
     }   
     document.getElementById('pokemon-selector-loader').style.display = "none";
+
 }
 
 export { offerReward }

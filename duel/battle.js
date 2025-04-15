@@ -1,8 +1,8 @@
 import { offerReward } from "../rewards.js";
+import { displaySummaryModal } from "../utils.js";
 
 class BattlePokemon {
     constructor(pokemon) {
-        console.log("RECIEVED POKEMON", pokemon)
         this.pokemon = pokemon;
         this.hp = this.pokemon.stats.hp;
         this.type = "grass";
@@ -66,16 +66,21 @@ class BattlePokemon {
 
 
 class BattleSimulator {
-    constructor(homePokemon, awayPokemon , canvasID,music,endGameCallback=null,enemyMoveCallback=null) {
+    constructor(homePokemon, awayPokemon , canvasID,music,npc=null,enemyMoveCallback=null,endGameCallback=null) {
         this.enemyMoveCallback = enemyMoveCallback;
         this.homePokemon = new BattlePokemon(homePokemon);
         this.awayPokemon = new BattlePokemon(awayPokemon);
+        this.npc = npc;
+        this.battleSimBox = document.getElementById('battle-sim');
+        this.battleSimBox.style.display = 'flex';
 
         this.music = music;
         this.musicResetCallback = this.music.playNonDefault(1);
         
         
         this.endGameCallback = endGameCallback;
+
+        document.getElementById('duel-main-page').style.display = 'none';
 
         this.homePlayer = null;
         this.awayPlayer = null;
@@ -99,7 +104,7 @@ class BattleSimulator {
 
         await this.homePokemon.hydrateMoves();
         await this.awayPokemon.hydrateMoves();
-
+        console.log("AWAY HYDRATED MOVES", this.awayPokemon.pokemon.moves)
         for(let i=0; i<this.homePokemon.pokemon.moves.length; i++){
             let move = this.homePokemon.pokemon.moves[i];
             let attackButton = document.getElementById(`attack-${i+1}`)
@@ -165,7 +170,7 @@ class BattleSimulator {
         this.isHomeTurn = !this.isHomeTurn;
 
         if(this.enemyMoveCallback) {
-            this.enemyMoveCallback(this);
+            this.enemyMoveCallback(this,this.npc);
         }
         if (this.awayPokemon.isFainted()) {
             this.addBattleLog(`${this.awayPokemon.pokemon.name} fainted!` , "away");
@@ -216,10 +221,13 @@ class BattleSimulator {
         ctx.fillText(message, this.canvas.width / 2, this.canvas.height / 2);
 
         setTimeout(()=>{
-            document.getElementById('battle-sim').style.display='none'
+            this.battleSimBox.style.display='none'
+            document.getElementById('duel-main-page').style.display = 'flex';
             this.musicResetCallback(this.music)
-            offerReward(this.homePlayer)
-
+            offerReward(this.homePlayer,()=>displaySummaryModal(this.homePlayer,false))
+            while (this.battleLogContainer.children.length > 2) {
+                this.battleLogContainer.removeChild(this.battleLogContainer.lastChild);
+            }
         },7000)
 
     }
