@@ -8,7 +8,7 @@ import {RTCPlayer, initiateRTCBattle} from "./rtc.js";
 
 const music = new Music('../assets/music.mp3', ["../assets/happy.mp3", "../assets/battle-music.mp3","../assets/defeat.mp3"])
 const ping = new Pinger('../assets/bubble.mp3', 'ping');          
-// music.player.play();
+music.player.play();
 
 let player = Player.loadState()
 

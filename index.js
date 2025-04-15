@@ -10,7 +10,7 @@ initBanners()
 
 const music = new Music('assets/music.mp3', ["assets/happy.mp3"])
 new Pinger('assets/bubble.mp3', 'ping');          
-// music.player.play();
+music.player.play();
 document.getElementById('music-control').addEventListener('click', music.togglePlayer);
 document.getElementById('start-game-button').addEventListener('click', () => startGameHandler());
 

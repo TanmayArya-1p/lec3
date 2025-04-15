@@ -188,8 +188,14 @@
         transition: background-color 0.2s ease;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         height: fit-content ;
+        transition: transform 0.2s ease-in-out;
 
     }
+    .attack-button:hover {
+        transform: translateY(-0.2rem);
+        transition: transform 0.2s ease,
+    }
+
     #turn-display {
         font-size: 1.5rem;
         font-family: 'Pixelify Sans', sans-serif;
@@ -362,7 +368,21 @@
 
 
         </div>
+        <a>
+            PokéLAN is a multiplayer Pokémon battle game that allows you to challenge your friends or NPCs in real-time. To play with another player on LAN:
+            <ul>
+                <li>Player A copies the "Local SDP" by clicking the copy button next to it.</li>
+                <li>Player A shares the copied "Local SDP" with Player B.</li>
+                <li>Player B obtains the "Local SDP" from Player A and pastes it into the "Set Remote SDP" text area.</li>
+                <li>Player B clicks the "Set Remote" button to configure the remote description.</li>
+                <li>Player B then copies their own "Local SDP" and shares it with Player A.</li>
+                <li>Player A pastes Player B's "Local SDP" into their "Set Remote SDP" text area and clicks the "Set Answer" button.</li>
+                <li>Once both players have completed these steps, the connection will be established, and the battle can begin.</li>
+            </ul>
+        </a>
+        <div>Made with ❤️ By <a href="https://github.com/TanmayArya-1p">tcan</a></div>
     </div>
+
 
     <div id="pokemon-selection-modal" class="modal-container" style="display: none;">
         <div id="pokemon-selection-modal-content" style="align-items:  center;" class="modal-card">
@@ -386,5 +406,5 @@
 
         </div>
     </div>
-</body>
+</body> 
 </html>
