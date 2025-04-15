@@ -99,6 +99,9 @@ class BattleSimulator {
         this.turnDisplay = document.getElementById('turn-display');
         this.turnDisplay.innerText = "Your Turn";
         this.turnDisplay.style.color = "#3b4cca";
+
+        console.log("SETUP BATTLE BETWEEN" , this.homePokemon.pokemon.moves.map(a=>a.name) , this.awayPokemon.pokemon.moves.map(a=>a.name) )
+
     }
     async initMoves() {
 
@@ -163,9 +166,8 @@ class BattleSimulator {
             console.error("WRONG TURN");
             return;
         }
-        const damage = this.homePokemon.attack(this.awayPokemon, this.awayPokemon.pokemon.moves[moveIDX]);
-        this.addBattleLog(`${this.homePokemon.pokemon.name} used ${this.awayPokemon.pokemon.moves[moveIDX].name} on ${this.awayPokemon.pokemon.name} for ${damage} damage.` , "home");
-        console.log(this.battleLog)
+        const damage = this.homePokemon.attack(this.awayPokemon, this.homePokemon.pokemon.moves[moveIDX]);
+        this.addBattleLog(`${this.homePokemon.pokemon.name} used ${this.homePokemon.pokemon.moves[moveIDX].name} on ${this.awayPokemon.pokemon.name} for ${damage} damage.` , "home");
 
         this.isHomeTurn = !this.isHomeTurn;
 
@@ -174,7 +176,6 @@ class BattleSimulator {
         }
         if (this.awayPokemon.isFainted()) {
             this.addBattleLog(`${this.awayPokemon.pokemon.name} fainted!` , "away");
-            console.log("home wins")
             this.draw().then(()=>this.conclude("home"))
         }
         else{
@@ -188,8 +189,8 @@ class BattleSimulator {
             console.error("WRONG TURN");
             return;
         }
-        const damage = this.awayPokemon.attack(this.homePokemon, this.homePokemon.pokemon.moves[moveIDX]);
-        this.addBattleLog(`${this.homePokemon.pokemon.name} used ${this.awayPokemon.pokemon.moves[moveIDX].name} on ${this.awayPokemon.pokemon.name} for ${damage} damage.`,"away");
+        const damage = this.awayPokemon.attack(this.homePokemon, this.awayPokemon.pokemon.moves[moveIDX]);
+        this.addBattleLog(`${this.awayPokemon.pokemon.name} used ${this.awayPokemon.pokemon.moves[moveIDX].name} on ${this.homePokemon.pokemon.name} for ${damage} damage.`,"away");
 
         this.isHomeTurn = !this.isHomeTurn;
         ;
@@ -291,7 +292,7 @@ class BattleSimulator {
 
         ctx.fillStyle = 'black';
         ctx.font = '20px Pixelify Sans';
-        ctx.fillText(this.homePokemon.pokemon.name, this.canvas.width - 440 , 320);
+        ctx.fillText(this.awayPokemon.pokemon.name, this.canvas.width - 440 , 320);
         return 0;
     }
 }
