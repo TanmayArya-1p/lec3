@@ -38,18 +38,21 @@ class BattlePokemon {
     }
 
 
-    attack(target, move) {        
+    attack(target, move,damage=null) {        
         const movePower = move.power;
         const moveAccuracy = move.accuracy;
 
-        if (Math.random() * 100 > moveAccuracy) {
+        if (damage!==null && Math.random() * 100 > moveAccuracy) {
             return 0;
         }
 
-        const randomFactor = Math.random() * (1 - 0.9) + 0.2;
-        const damage = Math.floor(
-            (movePower * (this.pokemon.stats.attack / target.pokemon.stats.defense)) * randomFactor
-        );  target.hp -= damage;
+        if(damage===null){
+            const randomFactor = Math.random() * (1 - 0.9) + 0.2;
+            damage = Math.floor(
+                (movePower * (this.pokemon.stats.attack / target.pokemon.stats.defense)) * randomFactor
+            );  
+        }
+        target.hp -= damage;
         target.hp = Math.max(target.hp, 0);
 
         return damage;
@@ -63,10 +66,18 @@ class BattlePokemon {
 
 }
 
-
+let bsInUse = false;
 
 class BattleSimulator {
-    constructor(homePokemon, awayPokemon , canvasID,music,npc=null,enemyMoveCallback=null,endGameCallback=null) {
+    constructor(homePokemon, awayPokemon , canvasID,music,npc=null,enemyMoveCallback=null,homeMoveHook=null,endGameCallback=null) {
+        if(bsInUse) {
+            console.error("BATTLE SIMULATOR ALREADY IN USE");
+            return;
+        }
+        bsInUse = true;
+
+        this.homeMoveHook = homeMoveHook;
+
         this.enemyMoveCallback = enemyMoveCallback;
         this.homePokemon = new BattlePokemon(homePokemon);
         this.awayPokemon = new BattlePokemon(awayPokemon);
@@ -99,9 +110,6 @@ class BattleSimulator {
         this.turnDisplay = document.getElementById('turn-display');
         this.turnDisplay.innerText = "Your Turn";
         this.turnDisplay.style.color = "#3b4cca";
-
-        console.log("SETUP BATTLE BETWEEN" , this.homePokemon.pokemon.moves.map(a=>a.name) , this.awayPokemon.pokemon.moves.map(a=>a.name) )
-
     }
     async initMoves() {
 
@@ -126,6 +134,11 @@ class BattleSimulator {
             this.turnDisplay.innerText = `Opponent's Turn`;
             this.turnDisplay.style.color = "#ff0000";
         }
+    }
+
+    toggleTurn() {
+        this.isHomeTurn = !this.isHomeTurn;
+        this.toggleTurnDisplay();
     }
 
     setPlayer(player) {
@@ -169,6 +182,9 @@ class BattleSimulator {
         const damage = this.homePokemon.attack(this.awayPokemon, this.homePokemon.pokemon.moves[moveIDX]);
         this.addBattleLog(`${this.homePokemon.pokemon.name} used ${this.homePokemon.pokemon.moves[moveIDX].name} on ${this.awayPokemon.pokemon.name} for ${damage} damage.` , "home");
 
+        if(this.homeMoveHook) this.homeMoveHook(moveIDX+"|"+damage)
+
+            
         this.isHomeTurn = !this.isHomeTurn;
 
         if(this.enemyMoveCallback) {
@@ -184,12 +200,13 @@ class BattleSimulator {
         this.toggleTurnDisplay();
 
     }
-    attackHome(moveIDX) {
+    attackHome(moveIDX,damage=null) {
         if(this.isHomeTurn || this.concluded) {
             console.error("WRONG TURN");
             return;
         }
-        const damage = this.awayPokemon.attack(this.homePokemon, this.awayPokemon.pokemon.moves[moveIDX]);
+
+        damage = this.awayPokemon.attack(this.homePokemon, this.awayPokemon.pokemon.moves[moveIDX],damage);
         this.addBattleLog(`${this.awayPokemon.pokemon.name} used ${this.awayPokemon.pokemon.moves[moveIDX].name} on ${this.homePokemon.pokemon.name} for ${damage} damage.`,"away");
 
         this.isHomeTurn = !this.isHomeTurn;
@@ -229,6 +246,7 @@ class BattleSimulator {
             while (this.battleLogContainer.children.length > 2) {
                 this.battleLogContainer.removeChild(this.battleLogContainer.lastChild);
             }
+            bsInUse = false;
         },7000)
 
     }

@@ -7,7 +7,6 @@ const npcResponseStyles = {
     "pureRandomness" : (moves) => Math.floor(Math.random() * moves.length),
 }
 
-
 class NPC {
     constructor(wait=3000,npcResponse=npcResponseStyles.pureRandomness,name=null,pokemonCode=null) {
         if(name===null){

@@ -4,6 +4,7 @@ import {Music, Pinger} from '../music.js';
 import { startNPCBattle } from "./npc.js";
 import { offerReward } from "../rewards.js";
 import { displaySummaryModal } from "../utils.js";
+import {RTCPlayer, initiateRTCBattle} from "./rtc.js";
 
 const music = new Music('../assets/music.mp3', ["../assets/happy.mp3", "../assets/battle-music.mp3","../assets/defeat.mp3"])
 const ping = new Pinger('../assets/bubble.mp3', 'ping');          
@@ -14,6 +15,7 @@ let player = Player.loadState()
 if(!player){
     window.location.href="/"
 }
+console.log(player)
 
 document.getElementById('logout-button').addEventListener('click', async function () {
     if (confirm("Are you sure you want to log out?. All your data will get wiped out with this account if you logout")) {
@@ -30,3 +32,9 @@ document.getElementById('npc-battle-start').addEventListener('click', async func
 
 initNavbar(player)
 document.getElementById('player-name').innerText = player.nickname;
+
+
+let rtcPlayer = new RTCPlayer(player,music);
+window.rtc = rtcPlayer; 
+
+
