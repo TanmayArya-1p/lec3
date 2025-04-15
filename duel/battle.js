@@ -91,11 +91,33 @@ class BattleSimulator {
 
         this.battleLog = [];
         this.battleLogContainer = document.getElementById('battle-log-container');
+        this.turnDisplay = document.getElementById('turn-display');
+        this.turnDisplay.innerText = "Your Turn";
+        this.turnDisplay.style.color = "#3b4cca";
     }
     async initMoves() {
 
         await this.homePokemon.hydrateMoves();
         await this.awayPokemon.hydrateMoves();
+
+        for(let i=0; i<this.homePokemon.pokemon.moves.length; i++){
+            let move = this.homePokemon.pokemon.moves[i];
+            let attackButton = document.getElementById(`attack-${i+1}`)
+            attackButton.innerText = move.name;
+            attackButton.addEventListener('click', () => {
+                this.attackAway(i);
+            });
+        }
+
+    }
+    toggleTurnDisplay() {
+        if(this.isHomeTurn) {
+            this.turnDisplay.innerText = "Your Turn";
+            this.turnDisplay.style.color = "#3b4cca";
+        } else {
+            this.turnDisplay.innerText = `Opponent's Turn`;
+            this.turnDisplay.style.color = "#ff0000";
+        }
     }
 
     setPlayer(player) {
@@ -153,6 +175,8 @@ class BattleSimulator {
         else{
             this.draw();
         }
+        this.toggleTurnDisplay();
+        
     }
     attackHome(moveIDX) {
         if(this.isHomeTurn || this.concluded) {
@@ -171,6 +195,8 @@ class BattleSimulator {
         } else{
             this.draw();
         }
+        this.toggleTurnDisplay();
+
     }
     conclude(winner){
         this.concluded = true;

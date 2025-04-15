@@ -31,19 +31,6 @@ bs.setOpponent(player)
 await bs.initMoves()
 
 
-async function performAttacks() {
-    for (let i = 0; i < 8; i++) {
-        bs.attackHome(0);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        bs.attackAway(0);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-}
-
-
-
 
 initNavbar(player)
 document.getElementById('player-name').innerText = player.nickname;
-
-await performAttacks();
