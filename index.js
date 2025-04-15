@@ -9,10 +9,13 @@ import { displaySummaryModal } from './utils.js';
 initBanners()
 
 const music = new Music('assets/music.mp3', ["assets/happy.mp3"])
-new Pinger('assets/bubble.mp3', 'ping');          
+const pinger = new Pinger('assets/bubble.mp3', 'ping');          
 music.player.play();
-document.getElementById('music-control').addEventListener('click', music.togglePlayer);
-document.getElementById('start-game-button').addEventListener('click', () => startGameHandler());
+
+
+let playerNickname = ""
+let playerCharacter = ""
+
 
 function startGameHandler() {
     document.getElementById('start-game-button').style.display = 'none';
@@ -22,11 +25,6 @@ function startGameHandler() {
     },5500)
 }
 
-
-let playerNickname = ""
-let playerCharacter = ""
-
-
 function checkAuth() {
     if(!Player.isNew()) {
         let player = Player.loadState()
@@ -35,11 +33,10 @@ function checkAuth() {
         displaySummaryModal(player);
     }
 }
-
-
 await checkAuth()
 
-
+document.getElementById('music-control').addEventListener('click', music.togglePlayer);
+document.getElementById('start-game-button').addEventListener('click', () => startGameHandler());
 document.getElementById('nickname-submit').addEventListener('click', function () {
     playerNickname = document.getElementById('nickname-input').value.trim();
     if (playerNickname) {
@@ -47,7 +44,6 @@ document.getElementById('nickname-submit').addEventListener('click', function ()
         document.getElementById('character-selection-modal').style.display = 'flex';
     }
 });
-
 document.querySelectorAll(`.character-option`).forEach(option => {
     option.addEventListener('click', async function () {
         playerCharacter = this.getAttribute('data-character-name');
