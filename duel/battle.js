@@ -124,6 +124,8 @@ class BattleSimulator {
                 this.attackAway(i);
             });
         }
+        document.getElementById('attack-loader').style.display = "none";
+        document.getElementById('attack-buttons-container').style.display = "flex";
 
     }
     toggleTurnDisplay() {
@@ -247,7 +249,12 @@ class BattleSimulator {
                 this.battleLogContainer.removeChild(this.battleLogContainer.lastChild);
             }
             bsInUse = false;
+            document.getElementById('attack-loader').style.display = "block";
+            document.getElementById('attack-buttons-container').style.display = "flex";
         },7000)
+
+
+
 
     }
     async draw() {

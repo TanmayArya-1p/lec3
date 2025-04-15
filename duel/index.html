@@ -276,7 +276,8 @@
             <div style="display: flex; flex-direction: column; gap: 1rem;align-items: center;">
                 <div id="battle-controls" style="display: flex; flex-direction: row; gap: 1rem; padding: 1rem; height: fit-content;align-items: center;">
                     <h2>Attacks</h2>
-                    <div style="display: flex; gap: 1rem; flex-direction: row; flex-wrap: wrap; justify-content: center;">
+                    <div class="lds-dual-ring" id="attack-loader"></div>
+                    <div style="display: none; gap: 1rem; flex-direction: row; flex-wrap: wrap; justify-content: center;" id="attack-buttons-container">
                         <button class="attack-button" id="attack-1">Sweep</button>
                         <button class="attack-button" id="attack-2">Sweep</button>
                         <button class="attack-button" id="attack-3">Sweep</button>
@@ -308,9 +309,9 @@
                     <h2 style="text-align: center;">Team:</h2>
                     <div id="pokemon-team-container">
                         <div id="pokemon-card-template" style="display: none;">
-                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" alt="ash" class="character-selection-image" >
-                            <div id="pokemon-name" style="text-align: center;">Jigglypuff</div>
-                            <div id="pokemon-type" style="text-align: center;">Jigglypuff</div>
+                            <img src="" alt="ash" class="character-selection-image" >
+                            <div id="pokemon-name" style="text-align: center;"></div>
+                            <div id="pokemon-type" style="text-align: center;"></div>
 
                             <div style="display: flex;flex-direction: row; gap:0.5rem; justify-content: center;">
                                 <img src="../assets/heart.svg" alt="heart" class="character-selection-image" style="width: 1rem;height: 1rem;">

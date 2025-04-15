@@ -198,12 +198,14 @@ async function initiateRTCBattle(rtcplayer,music){
     let bs = new BattleSimulator(rtcplayer.homePlayer.team[0], rtcplayer.player.team[0], "battle-arena", music,null,null,(movestring)=>rtcplayer.send(`${movestring}`));
     bs.setPlayer(rtcplayer.homePlayer)
     bs.setOpponent(rtcplayer.player)
+
     await bs.draw()
-    await bs.initMoves()
     if(!rtcplayer.isOfferer) {
         console.log("TOGGLED NOT OFFERER")
         bs.toggleTurn()
     }
+    await bs.initMoves()
+
     rtcplayer.moveMakeCallback = (idx,damage) => {
         console.log("REMOTE OPPONENT MADE MOVE" ,idx,damage)
         bs.attackHome(idx,damage);
