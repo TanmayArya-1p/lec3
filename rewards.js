@@ -3,6 +3,8 @@ import Pokemon from "../pokemon.js";
 
 
 async function offerReward(player,callback=null) {
+    player.xp += 50;
+    player.saveState();
     const pokemons = [];
     let offset = 0
 
@@ -30,6 +32,10 @@ async function offerReward(player,callback=null) {
         pokemonElement.id = `pokemon-${i}`;
         pokemonElement.addEventListener('click', async function () {
                 player.addPokemon(pokemon);
+                player.addPokemon(pokemon);
+
+                player.addPokemon(pokemon);
+
                 player.saveState();
                 document.getElementById("pokemon-selection-modal").style.display = 'none';
                 if(callback){

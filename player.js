@@ -3,6 +3,7 @@ class Player {
         this.nick = nick;
         this.char = char;
         this.team = pokemons;
+        this.xp = 50;
     }
     getPokemon(index) {
         return this.team[index];

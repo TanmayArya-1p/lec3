@@ -176,7 +176,7 @@ class BattleSimulator {
             this.draw();
         }
         this.toggleTurnDisplay();
-        
+
     }
     attackHome(moveIDX) {
         if(this.isHomeTurn || this.concluded) {
@@ -214,6 +214,7 @@ class BattleSimulator {
         ctx.textBaseline = 'middle';
         const message = winner === "home" ? "You Win!" : "You Lose!";
         ctx.fillText(message, this.canvas.width / 2, this.canvas.height / 2);
+
         setTimeout(()=>{
             document.getElementById('battle-sim').style.display='none'
             this.musicResetCallback(this.music)

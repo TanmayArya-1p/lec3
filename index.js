@@ -59,16 +59,20 @@ document.querySelectorAll(`.character-option`).forEach(option => {
 });
 
 
-async function displayWelcomeModal(player) {
-    document.getElementById('pokemon-selection-modal').style.display = 'none';
-    document.getElementById('nickname-modal').style.display = 'none';
-    document.getElementById('character-selection-modal').style.display = 'none';
+async function displayWelcomeModal(player,modal=true) {
+    if(modal) {
+        document.getElementById('pokemon-selection-modal').style.display = 'none';
+        document.getElementById('nickname-modal').style.display = 'none';
+        document.getElementById('character-selection-modal').style.display = 'none';
+    
+        document.getElementById('welcome-modal').style.display = 'flex';
+        document.getElementById('welcome-header').innerText = 'Welcome ' +player.nick + '!';
+    }
 
-    document.getElementById('welcome-modal').style.display = 'flex';
-    document.getElementById('welcome-header').innerText = 'Welcome ' +player.nick + '!';
     document.getElementById('welcome-character').src = `/assets/${player.char.toLowerCase()}.png`;
     document.getElementById('welcome-character').alt = player.char;
     document.getElementById('character-name-welcome-modal').innerText = player.nick;
+    document.getElementById('character-name-welcome-modal').innerText = player.nick + '\n' + "(XP: "+player.xp+")";
 
 
     let pokemonTeamContainer  = document.getElementById('pokemon-team-container');
