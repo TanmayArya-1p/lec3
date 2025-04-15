@@ -24,6 +24,11 @@ document.getElementById('logout-button').addEventListener('click', async functio
     }
 })
 
+document.getElementById('copy-sdp').addEventListener('click', async function () {
+    let sdp = document.getElementById('local-sdp').value;
+    navigator.clipboard.writeText(sdp)
+})
+
 displaySummaryModal(player,false)
 
 document.getElementById('npc-battle-start').addEventListener('click', async function () {

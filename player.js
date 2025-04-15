@@ -32,9 +32,41 @@ class Player {
         localStorage.removeItem('player');
         window.location.href = '/';
     }
+    static playerOcclusion(player) {
+        player = {
+            nick: player.nick,
+            xp: player.xp,
+            char: player.char,
+            team: [
+                {
+                    name: player.team[0].name,
+                    code: player.team[0].code,
+                    sprites: {
+                        front_default: player.team[0].sprites.front_default,
+                    },
+                    power: player.team[0].power,
+                    types: player.team[0].types,
+                    stats: player.team[0].stats,
+                    moves: player.team[0].moves.map((move) => {
+                        return {
+                            name: move.name,
+                            power: move.power,
+                            type: move.type,
+                            accuracy: move.accuracy,
+                            pp: move.pp,
+                            priority: move.priority
+                        }
+                    }
+                    )
+                }
+            ]
+        };
+        return player
+    }
 
 
 }
+
 
 
 export default Player;

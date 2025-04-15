@@ -1,4 +1,5 @@
 import { BattleSimulator } from "./battle.js";
+import Player from '../player.js';
 
 class RTCPlayer {
     constructor(homePlayer,music,moveMakeCallback=null) {
@@ -9,9 +10,8 @@ class RTCPlayer {
         });
         this.homePlayer = homePlayer;
         this.player = null
-
+        this.sentLocalHomePlayer = false
         this.music = music
-
         this.moveMakeCallback = moveMakeCallback;
         this.dataChannel = null;
         this.isOfferer = true;
@@ -34,7 +34,6 @@ class RTCPlayer {
         });
 
 
-        this.sentLocalHomePlayer = false
 
         this.peerConnection.ondatachannel = (event) => {
             this.dataChannel = event.channel;
@@ -45,6 +44,7 @@ class RTCPlayer {
         this.peerConnection.onconnectionstatechange = () => {
             console.log('Connection state:', this.peerConnection.connectionState);
         };
+
 
         this.setupDOMListeners();
     }
@@ -106,11 +106,13 @@ class RTCPlayer {
             } else {
                 this.peerConnection.addEventListener('icegatheringstatechange', () => {
                     if (this.peerConnection.iceGatheringState === 'complete') resolve();
-                });
+                }); 
             }
         });
-        console.log('ICE gathering complete, answer ready');
+        alert('Remote Description set and answer generated');
+        
         return this.peerConnection.localDescription;
+
     }
 
     async setRemoteDescription(description) {
@@ -123,51 +125,17 @@ class RTCPlayer {
                 sdp: this.sanitizeSdp(description.sdp)
             })
         );
-        console.log('Remote description set');
     }
 
     sanitizeSdp(sdp) {
         return sdp.replace(/a=msid-semantic: WMS/g, 'a=msid-semantic:WMS').replace(/\r\n/g, '\n').replace(/\n/g, '\r\n').replace(/a=candidate:.* (raddr|rport) 0(\r\n|\n)/g, '');
     }
-
-    playerOcclusion(player) {
-        player = {
-            nick: player.nick,
-            xp: player.xp,
-            char: player.char,
-            team: [
-                {
-                    name: player.team[0].name,
-                    code: player.team[0].code,
-                    sprites: {
-                        front_default: player.team[0].sprites.front_default,
-                    },
-                    power: player.team[0].power,
-                    types: player.team[0].types,
-                    stats: player.team[0].stats,
-                    moves: player.team[0].moves.map((move) => {
-                        return {
-                            name: move.name,
-                            power: move.power,
-                            type: move.type,
-                            accuracy: move.accuracy,
-                            pp: move.pp,
-                            priority: move.priority
-                        }
-                    }
-                    )
-                }
-            ]
-        };
-        return player
-    }
-
     setupDataChannel() {
         this.dataChannel.onopen = () =>{
             console.log('DATA CHANNEL OPEN')
             if(this.sentLocalHomePlayer) return;
             setTimeout(() => {
-                let occludedPlayer = this.playerOcclusion(this.homePlayer);
+                let occludedPlayer = Player.playerOcclusion(this.homePlayer);
                 this.send(JSON.stringify(occludedPlayer));
             }, 1000);
             this.sentLocalHomePlayer = true;
@@ -191,6 +159,54 @@ class RTCPlayer {
             console.log('Sending data:', data);
             this.dataChannel.send(data);
         }
+    }
+
+    reset() {
+        if (this.dataChannel) {
+            if (this.dataChannel.readyState === 'open') {
+                this.dataChannel.close();
+                console.log('CLOSE DATA CHANNEL');
+            }
+            this.dataChannel.onopen = null;
+            this.dataChannel.onmessage = null;
+            this.dataChannel.onclose = null;
+        }
+    
+        if (this.peerConnection) {
+            this.peerConnection.onicecandidate = null;
+            this.peerConnection.onconnectionstatechange = null;
+            this.peerConnection.ondatachannel = null;
+            this.peerConnection.close();
+            console.log('Peer connection closed');
+        }
+    
+        this.peerConnection = new RTCPeerConnection({
+            iceServers: [
+                { urls: "stun:stun.3clogic.com:3478" }
+            ]
+        });
+        this.dataChannel = null;
+        this.player = null;
+        this.sentLocalHomePlayer = false;
+    
+        this.peerConnection.onicecandidate = (event) => {
+            if (event.candidate) {
+                this.iceCandidates.push(event.candidate);
+                console.log('New ICE candidate:', event.candidate.candidate);
+            }
+        };
+    
+        this.peerConnection.ondatachannel = (event) => {
+            this.dataChannel = event.channel;
+            this.setupDataChannel();
+            console.log('DATA CHANNEL REC');
+        };
+    
+        this.peerConnection.onconnectionstatechange = () => {
+            console.log('Connection state:', this.peerConnection.connectionState);
+        };
+    
+        console.log('RTCPlayer reset complete');
     }
 }
 
