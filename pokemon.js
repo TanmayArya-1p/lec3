@@ -16,7 +16,6 @@ class Pokemon{
             acc[stat.stat.name] = stat.base_stat;
             return acc;
         }, {});
-        console.log(this)
         this.hydrated=true
     }
 }

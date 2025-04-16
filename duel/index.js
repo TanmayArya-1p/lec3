@@ -32,5 +32,5 @@ document.getElementById('player-name').innerText = player.nickname;
 displaySummaryModal(player,false)
 initNavbar(player)
 let rtcPlayer = new RTCPlayer(player,music,ping);
-
+window.rtc = rtcPlayer
 

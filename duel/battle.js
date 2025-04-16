@@ -33,7 +33,6 @@ class BattlePokemon {
             }
         }
         this.pokemon.moves = temp;
-        console.log("HYDRATED MOVES", this.pokemon.moves)
         this.hydrated = true;
     }
 
@@ -119,7 +118,6 @@ class BattleSimulator {
 
         await this.homePokemon.hydrateMoves();
         await this.awayPokemon.hydrateMoves();
-        console.log("AWAY HYDRATED MOVES", this.awayPokemon.pokemon.moves)
         for(let i=0; i<this.homePokemon.pokemon.moves.length; i++){
             let move = this.homePokemon.pokemon.moves[i];
             let attackButton = document.getElementById(`attack-${i+1}`)
@@ -255,7 +253,6 @@ class BattleSimulator {
         ;
         if (this.homePokemon.isFainted()) {
             this.addBattleLog(`${this.homePokemon.pokemon.name} fainted!` , "home");
-            console.log("away wins")
             this.draw().then(()=>this.conclude("away"))
         } else{
             this.draw();
@@ -284,7 +281,10 @@ class BattleSimulator {
             this.battleSimBox.style.display='none'
             document.getElementById('duel-main-page').style.display = 'flex';
             this.musicResetCallback(this.music)
-            offerReward(this.homePlayer,()=>displaySummaryModal(this.homePlayer,false))
+            offerReward(this.homePlayer,()=>{
+                displaySummaryModal(this.homePlayer,false)
+                window.location.reload()
+            })
             while (this.battleLogContainer.children.length > 2) {
                 this.battleLogContainer.removeChild(this.battleLogContainer.lastChild);
             }
@@ -292,6 +292,10 @@ class BattleSimulator {
             document.getElementById('attack-loader').style.display = "block";
             document.getElementById('attack-buttons-container').style.display = "flex";
             document.getElementById('chat-log').style.display = "none";
+            if(this.endGameCallback) {
+                this.endGameCallback();
+            }
+
 
         },7000)
 

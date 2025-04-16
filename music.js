@@ -23,7 +23,6 @@ class Music {
         if(this.mute.style.display == "none") {
             return;
         }
-        console.log("HERE")
         let tmp = this.player.src;
         this.player.setAttribute('src', this.nonDefaults[idx]);
         this.player.loop = false;

@@ -41,7 +41,6 @@ async function displaySummaryModal(player,modal=true) {
                         player.team[0] = player.getPokemon(i);
                         player.team[i] = mainPokemon;
                         player.saveState();
-                        console.log("MAINED POKEMON: ", player.getPokemon(0));
 
                         displaySummaryModal(player,false);
                     }
