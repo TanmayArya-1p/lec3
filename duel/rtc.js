@@ -136,10 +136,10 @@ class RTCPlayer {
         this.dataChannel.onopen = () =>{
             console.log('DATA CHANNEL OPEN')
             if(this.sentLocalHomePlayer) return;
-            setTimeout(() => {
-                let occludedPlayer = Player.playerOcclusion(this.homePlayer);
-                this.send(JSON.stringify(occludedPlayer));
-            }, 1000);
+
+            let occludedPlayer = Player.playerOcclusion(this.homePlayer);
+            this.send(JSON.stringify(occludedPlayer));
+
             this.sentLocalHomePlayer = true;
         };  
         this.dataChannel.onmessage = (e) => {
