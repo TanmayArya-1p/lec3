@@ -2,12 +2,13 @@ import { BattleSimulator } from "./battle.js";
 import Player from '../player.js';
 
 class RTCPlayer {
-    constructor(homePlayer,music,moveMakeCallback=null) {
+    constructor(homePlayer,music,pinger,moveMakeCallback=null) {
         this.peerConnection = new RTCPeerConnection({
             iceServers : [
                 { urls: "stun:stun.3clogic.com:3478" }
             ]
         });
+        this.BSAddChatMessage = null
         this.homePlayer = homePlayer;
         this.player = null
         this.sentLocalHomePlayer = false
@@ -16,6 +17,8 @@ class RTCPlayer {
         this.dataChannel = null;
         this.isOfferer = true;
         this.iceCandidates = [];
+
+        this.pinger = pinger
         this.peerConnection.loading = true;
         this.peerConnection.onicecandidate = (event) => {
             if(event.candidate) {
@@ -145,10 +148,18 @@ class RTCPlayer {
             if (!this.player) {
                 this.player = JSON.parse(e.data);
                 console.log('Player data received:', this.player);
-                initiateRTCBattle(this,this.music)
+                this.player.isRTC = true
+                this.player.rtcSend = (data => this.send(data));
+                initiateRTCBattle(this,this.music,this.pinger)
             } else {
                 let ms = e.data.split("|");
-                this.moveMakeCallback(parseInt(ms[0], 10),parseInt(ms[1], 10));
+                if(ms[0] === "chat"){
+                    if(this.BSAddChatMessage) {
+                        this.BSAddChatMessage(ms[1]);
+                    }
+                } else{
+                    this.moveMakeCallback(parseInt(ms[0], 10),parseInt(ms[1], 10));
+                }
             }
         };
         this.dataChannel.onclose = () => console.log('DATA CHANNEL CLOSED');
@@ -210,11 +221,11 @@ class RTCPlayer {
     }
 }
 
-async function initiateRTCBattle(rtcplayer,music){
-    let bs = new BattleSimulator(rtcplayer.homePlayer.team[0], rtcplayer.player.team[0], "battle-arena", music,null,null,(movestring)=>rtcplayer.send(`${movestring}`));
+async function initiateRTCBattle(rtcplayer,music,pinger){
+    let bs = new BattleSimulator(rtcplayer.homePlayer.team[0], rtcplayer.player.team[0], "battle-arena", music,pinger,null,null,(movestring)=>rtcplayer.send(`${movestring}`));
     bs.setPlayer(rtcplayer.homePlayer)
     bs.setOpponent(rtcplayer.player)
-
+    rtcplayer.BSAddChatMessage = (message) => bs.addChatMessage(message , "away");
     await bs.draw()
     if(!rtcplayer.isOfferer) {
         console.log("TOGGLED NOT OFFERER")

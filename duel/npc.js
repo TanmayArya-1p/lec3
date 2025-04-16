@@ -32,11 +32,11 @@ class NPC {
 }
 
 
-async function startNPCBattle(player,music) {
+async function startNPCBattle(player,music,pinger) {
     const npc = new NPC();
     await npc.player.getPokemon(0).hydrateData();
 
-    let bs=new BattleSimulator(player.getPokemon(0), npc.player.getPokemon(0), "battle-arena" , music,npc,npc.simulatorBinding);
+    let bs=new BattleSimulator(player.getPokemon(0), npc.player.getPokemon(0), "battle-arena" , music,pinger,npc,npc.simulatorBinding);
     bs.draw()
     
     bs.setPlayer(player)

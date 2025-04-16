@@ -69,13 +69,13 @@ class BattlePokemon {
 let bsInUse = false;
 
 class BattleSimulator {
-    constructor(homePokemon, awayPokemon , canvasID,music,npc=null,enemyMoveCallback=null,homeMoveHook=null,endGameCallback=null) {
+    constructor(homePokemon, awayPokemon , canvasID,music,pinger,npc=null,enemyMoveCallback=null,homeMoveHook=null,endGameCallback=null) {
         if(bsInUse) {
             console.error("BATTLE SIMULATOR ALREADY IN USE");
             return;
         }
         bsInUse = true;
-
+        this.pinger = pinger;
         this.homeMoveHook = homeMoveHook;
 
         this.enemyMoveCallback = enemyMoveCallback;
@@ -99,6 +99,9 @@ class BattleSimulator {
         this.canvas.width = 1000;
         this.canvas.height = 500;   
 
+        this.chatLog = []
+
+
         this.isHomeTurn = true
         this.concluded = false
         
@@ -107,6 +110,7 @@ class BattleSimulator {
 
         this.battleLog = [];
         this.battleLogContainer = document.getElementById('battle-log-container');
+        this.chatLogContainer = document.getElementById('chat-log-container');
         this.turnDisplay = document.getElementById('turn-display');
         this.turnDisplay.innerText = "Your Turn";
         this.turnDisplay.style.color = "#3b4cca";
@@ -142,7 +146,25 @@ class BattleSimulator {
         this.isHomeTurn = !this.isHomeTurn;
         this.toggleTurnDisplay();
     }
-
+    addChatMessage(message,issuer) {
+        this.pinger.play()
+        let newNode = null;
+        let nameMap = {
+            "home": this.homePlayer.nick,
+            "away": this.awayPlayer.nick
+        }
+        if(issuer == "home"){
+            newNode = document.getElementById('player-log-template').cloneNode(true);
+        }
+        else if(issuer == "away"){
+            newNode = document.getElementById('opponent-log-template').cloneNode(true);
+        }
+        newNode.style.display = "block";
+        newNode.innerHTML = `<strong>${nameMap[issuer]}:</strong> ${message}`;  
+        this.chatLogContainer.appendChild(newNode);
+        this.chatLogContainer.scrollTo(0, this.chatLogContainer.scrollHeight);
+        this.chatLog.push(message);
+    }
     setPlayer(player) {
         this.homePlayer = player;
         this.homePlayerCard.querySelector('img').src = "../assets/" + player.char.toLowerCase() + ".png";
@@ -154,6 +176,21 @@ class BattleSimulator {
         this.awayPlayerCard.querySelector('img').src = "../assets/" + opponent.char.toLowerCase() + ".png";
         this.awayPlayerCard.querySelector('img').alt = opponent.char;
         this.awayPlayerCard.querySelector('h2').innerText = opponent.nick;
+
+        if(opponent.isRTC === true) {
+            document.getElementById('chat-log').style.display = "flex";
+            document.getElementById('chat-input').addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    let message = document.getElementById('chat-input').value;
+                    this.addChatMessage(message, "home");
+                    this.chatLogContainer.scrollTo(0, this.chatLogContainer.scrollHeight);
+                    this.chatLog.push(message);
+                    document.getElementById('chat-input').value = "";
+                    opponent.rtcSend("chat|" + message);
+                }
+            });
+        }
+
     }
     addBattleLog(entry,issuer="home") {
 
@@ -175,6 +212,9 @@ class BattleSimulator {
     }
     clearBattleLog() {
         this.battleLog = [];
+    }
+    clearChatLog() {
+        this.chatLog = [];
     }
     attackAway(moveIDX) {
         if(!this.isHomeTurn || this.concluded) {
@@ -251,6 +291,8 @@ class BattleSimulator {
             bsInUse = false;
             document.getElementById('attack-loader').style.display = "block";
             document.getElementById('attack-buttons-container').style.display = "flex";
+            document.getElementById('chat-log').style.display = "none";
+
         },7000)
 
 

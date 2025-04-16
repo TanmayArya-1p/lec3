@@ -24,13 +24,13 @@ document.getElementById('copy-sdp').addEventListener('click', async function () 
     navigator.clipboard.writeText(sdp)
 })
 document.getElementById('npc-battle-start').addEventListener('click', async function () {
-    await startNPCBattle(player,music);
+    await startNPCBattle(player,music,ping);
 })
 document.getElementById('player-name').innerText = player.nickname;
 
 
 displaySummaryModal(player,false)
 initNavbar(player)
-let rtcPlayer = new RTCPlayer(player,music);
+let rtcPlayer = new RTCPlayer(player,music,ping);
 
 

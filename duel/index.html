@@ -141,6 +141,15 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
         font-family: 'Pixelify Sans', sans-serif;
     }
+    #chat-log {
+        width: 40%; 
+        height: 14rem; 
+        background-color: antiquewhite; 
+        border-radius: 10px; 
+        padding-inline: 1rem; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        font-family: 'Pixelify Sans', sans-serif;
+    }
     #battle-controls {
         height:auto; 
         padding:0.5rem;
@@ -228,7 +237,15 @@
         transition: background-color 0.2s ease;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
-
+    #chat-input {
+        height: 1.5rem; 
+        border-radius: 8px; 
+        padding: 0.3rem; 
+        font-family: 'Pixelify Sans', sans-serif; 
+        font-size: 0.9rem; 
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+        margin-bottom: 0.8rem;
+    }
     </style>
 <body>
     <nav id="navbar">
@@ -251,7 +268,7 @@
         <div id="battle-container">
             <div id="player-1-card" class="blue-white-header player-card">
                 <h2 style="text-align: center;"></h2>                
-                <img src="../assets/gary.png" alt="Gary" class="character-selection-image" style="width: 8rem; height: auto;">
+                <img src="../assets/gary.png" alt="Gary" class="character-selection-image" style="width: auto; height: 8rem;">
             </div>           
              
             <div id="battle-wrapper">
@@ -264,7 +281,7 @@
 
             <div id="player-2-card" class="blue-white-header player-card">
                 <h2 style="text-align: center;color: #ff0000;"></h2>                
-                <img src="../assets/gary.png" alt="Gary" class="character-selection-image" style="width: 8rem; height: auto;">
+                <img src="../assets/gary.png" alt="Gary" class="character-selection-image" style="width: auto; height: 8rem;">
             </div>
 
         </div>
@@ -278,6 +295,16 @@
                     <div style="color: #ff0000; margin-bottom: 0.5rem;" id="opponent-log-template" style="display: none;">
                     </div>
                 </div>
+            </div>
+            <div id="chat-log" style="display: none;" class="vc-div-contents">
+                <h2>Battle Chat</h2>
+                <div style="height: 44%; overflow-y: auto; width: 90%   ;"  id="chat-log-container">
+                    <div style="color: #3b4cca; margin-bottom: 0.5rem;" id="chat-log-template" style="display: none;">
+                    </div>
+                    <div style="color: #ff0000; margin-bottom: 0.5rem;" id="chat-log-template" style="display: none;">
+                    </div>
+                </div>
+                <input type="text" id="chat-input" placeholder="Type your message">
             </div>
             <div style="display: flex; flex-direction: column; gap: 1rem;align-items: center;">
                 <div id="battle-controls" style="display: flex; flex-direction: row; gap: 1rem; padding: 1rem; height: fit-content;align-items: center;">
@@ -304,7 +331,7 @@
         <a style="font-size: 1.5rem;text-align: center;">
             Welcome to PokéLAN Duel Mode! You can battle against other trainers on the same LAN or battle NPCs to gain XP and unlock new Pokémons.
         </a>
-        <div style="display: flex; flex-direction: row; gap: 1rem;width: 90%; justify-content: space-around;">
+        <div style="display: flex; flex-direction: row; gap: 1rem;width: 90%; justify-content: center">
             <div style="display: flex;flex-direction: row;gap:8rem;padding: 2rem;height: fit-content;" class="aw-card">
                 <div class="vc-div-contents">       
                     <h2>Character:</h2>
