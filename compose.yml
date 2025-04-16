@@ -1,0 +1,6 @@
+services:
+  web:
+    build: .
+    ports:
+      - "5500:80"
+    command: ["nginx", "-g", "daemon off;"]
