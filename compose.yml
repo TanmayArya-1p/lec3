@@ -3,4 +3,4 @@ services:
     build: .
     ports:
       - "5500:80"
-    command: ["nginx", "-g", "daemon off;"]
+    command: ["nginx", "-g", "daemon off;"] 

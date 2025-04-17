@@ -6,7 +6,7 @@ class Music {
         this.control = document.getElementById("music-control");
         this.player.setAttribute('src', src);
         this.player.setAttribute('loop', 'loop');
-        this.player.volume = 0.1;
+        this.player.volume = 0.4;
         this.nonDefaults = nonDefaults;
         this.mute.style.display = "";
         this.unmute.style.display = "none";
@@ -51,7 +51,7 @@ class Pinger {
         this.pingSrc = pingSrc;
         this.className = className;
         this.player = document.createElement("audio");
-        this.player.volume = 0.1;
+        this.player.volume = 0.4;
         this.player.setAttribute('src', pingSrc);
         this.setupListeners()
     }

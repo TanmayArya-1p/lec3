@@ -28,7 +28,7 @@ class BattlePokemon {
             moveData.name = move.name;
             temp.push(moveData)
             ct++
-            if(ct==5){
+            if(ct==4){
                 break
             }
         }
@@ -113,6 +113,13 @@ class BattleSimulator {
         this.turnDisplay = document.getElementById('turn-display');
         this.turnDisplay.innerText = "Your Turn";
         this.turnDisplay.style.color = "#3b4cca";
+
+
+        if(Math.random() > 0.5) {
+            document.getElementById("battle-bg").src = "../assets/battle-2.png"
+        }
+
+
     }
     async initMoves() {
 

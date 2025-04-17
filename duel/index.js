@@ -29,6 +29,8 @@ document.getElementById('npc-battle-start').addEventListener('click', async func
 document.getElementById('player-name').innerText = player.nickname;
 
 
+document.getElementById('battle-bg').src            
+
 displaySummaryModal(player,false)
 initNavbar(player)
 let rtcPlayer = new RTCPlayer(player,music,ping);
