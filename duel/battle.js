@@ -37,7 +37,8 @@ class BattlePokemon {
     }
 
 
-    attack(target, move,damage=null) {        
+    attack(target, move,damage=null) {  
+              
         const movePower = move.power;
         const moveAccuracy = move.accuracy;
 
@@ -127,10 +128,17 @@ class BattleSimulator {
         await this.awayPokemon.hydrateMoves();
         for(let i=0; i<this.homePokemon.pokemon.moves.length; i++){
             let move = this.homePokemon.pokemon.moves[i];
-            let attackButton = document.getElementById(`attack-${i+1}`)
-            attackButton.innerText = move.name;
+            let attackButton = document.getElementById(`attack-${i+1}`) 
+            move.currPP = move.pp;
+            
+            document.getElementById(`attack-${i+1}-text`).innerText = move.name;
+            document.getElementById(`attack-${i+1}-pp`).innerText = "PP: "+move.currPP + " / "+ move.pp;
+            document.getElementById(`attack-${i+1}-type`).innerText = move.type.name;
+
+
             attackButton.addEventListener('click', () => {
                 this.attackAway(i);
+
             });
         }
         document.getElementById('attack-loader').style.display = "none";
@@ -240,7 +248,19 @@ class BattleSimulator {
 
         if(this.homeMoveHook) this.homeMoveHook(moveIDX+"|"+damage)
 
-            
+        this.homePokemon.pokemon.moves[moveIDX].currPP = this.homePokemon.pokemon.moves[moveIDX].currPP - 1
+        document.getElementById(`attack-${moveIDX+1}-pp`).innerText = "PP: " + this.homePokemon.pokemon.moves[moveIDX].currPP+ " / "+ this.homePokemon.pokemon.moves[moveIDX].pp;
+
+
+
+        if(this.homePokemon.pokemon.moves[moveIDX].currPP === 0) {
+            const attackButton = document.getElementById(`attack-${moveIDX+1}`);
+            attackButton.disabled = true;
+            attackButton.style.opacity = 0.5;
+            attackButton.style.cursor = "not-allowed";
+        }
+
+
         this.isHomeTurn = !this.isHomeTurn;
 
         if(this.enemyMoveCallback) {
@@ -318,6 +338,7 @@ class BattleSimulator {
             }
             this.awayPokemonImage.style.display = "block"
             this.homePokemonImage.style.display = "block"
+            
 
 
         },7000)
