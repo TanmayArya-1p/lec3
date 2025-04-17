@@ -293,6 +293,9 @@ class BattleSimulator {
         const message = winner === "home" ? "You Win!" : "You Lose!";
         ctx.fillText(message, this.canvas.width / 2, this.canvas.height / 2);
 
+        this.awayPokemonImage.style.display = "none"
+        this.homePokemonImage.style.display = "none"
+
         this.homePlayer.arenaIDX = Math.floor(Math.random() * 2);
 
         setTimeout(()=>{
@@ -313,6 +316,8 @@ class BattleSimulator {
             if(this.endGameCallback) {
                 this.endGameCallback();
             }
+            this.awayPokemonImage.style.display = "block"
+            this.homePokemonImage.style.display = "block"
 
 
         },7000)
