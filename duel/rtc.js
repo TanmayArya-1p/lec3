@@ -146,6 +146,16 @@ class RTCPlayer {
             console.log('RECV:', e)
             if (!this.player) {
                 this.player = JSON.parse(e.data);
+                if(this.isOfferer) {
+                    switch (this.player.arenaIDX) {
+                        case 0:
+                            document.getElementById('battle-bg').src = "../assets/battle.gif";
+                            break;
+                        case 1:
+                            document.getElementById('battle-bg').src = "../assets/battle-2.png";
+                            break;
+                    }
+                }
                 console.log('Player data received:', this.player);
                 this.player.isRTC = true
                 this.player.rtcSend = (data => this.send(data));
@@ -169,6 +179,7 @@ class RTCPlayer {
             this.dataChannel.send(data);
         }
     }
+
 
     reset() {
         window.location.reload();

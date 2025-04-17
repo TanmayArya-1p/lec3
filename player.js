@@ -4,6 +4,7 @@ class Player {
         this.char = char;
         this.team = pokemons;
         this.xp = 50;
+        this.arenaIDX = Math.floor(Math.random() * 2);
     }
     getPokemon(index) {
         return this.team[index];
@@ -43,10 +44,17 @@ class Player {
                     code: player.team[0].code,
                     sprites: {
                         front_default: player.team[0].sprites.front_default,
+                        other: {
+                            showdown : {
+                                front_default: player.team[0].sprites.other.showdown.front_default,
+                                back_default: player.team[0].sprites.other.showdown.back_default
+                            }
+                        }
                     },
                     power: player.team[0].power,
                     types: player.team[0].types,
                     stats: player.team[0].stats,
+                    arenaIDX: player.arenaIDX,
                     moves: player.team[0].moves.map((move) => {
                         return {
                             name: move.name,

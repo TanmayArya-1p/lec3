@@ -100,6 +100,8 @@ class BattleSimulator {
 
         this.chatLog = []
 
+        this.homePokemonImage = document.getElementById('home-pokemon-img')
+        this.awayPokemonImage = document.getElementById('away-pokemon-img');
 
         this.isHomeTurn = true
         this.concluded = false
@@ -113,11 +115,9 @@ class BattleSimulator {
         this.turnDisplay = document.getElementById('turn-display');
         this.turnDisplay.innerText = "Your Turn";
         this.turnDisplay.style.color = "#3b4cca";
+        this.homePokemonImage.src = this.homePokemon.pokemon.sprites.other.showdown.back_default;
+        this.awayPokemonImage.src = this.awayPokemon.pokemon.sprites.other.showdown.front_default;
 
-
-        if(Math.random() > 0.5) {
-            document.getElementById("battle-bg").src = "../assets/battle-2.png"
-        }
 
 
     }
@@ -175,7 +175,16 @@ class BattleSimulator {
         this.homePlayerCard.querySelector('img').src = "../assets/" + player.char.toLowerCase() + ".png";
         this.homePlayerCard.querySelector('img').alt = player.char;
         this.homePlayerCard.querySelector('h2').innerText = player.nick;
+        switch(this.homePlayer.arenaIDX) {
+            case 0:
+                document.getElementById("battle-bg").src = "../assets/battle.gif"
+                break;
+            case 1:
+                document.getElementById("battle-bg").src = "../assets/battle-2.png" 
+                break;
+        }
     }
+
     setOpponent(opponent) {
         this.awayPlayer = opponent;
         this.awayPlayerCard.querySelector('img').src = "../assets/" + opponent.char.toLowerCase() + ".png";
@@ -284,6 +293,8 @@ class BattleSimulator {
         const message = winner === "home" ? "You Win!" : "You Lose!";
         ctx.fillText(message, this.canvas.width / 2, this.canvas.height / 2);
 
+        this.homePlayer.arenaIDX = Math.floor(Math.random() * 2);
+
         setTimeout(()=>{
             this.battleSimBox.style.display='none'
             document.getElementById('duel-main-page').style.display = 'flex';
@@ -318,23 +329,24 @@ class BattleSimulator {
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 
-        const homeImg = new Image();
-        homeImg.src = this.homePokemon.pokemon.sprites.back_default;
-        homeImg.addEventListener('load', () => {
-            if(this.concluded) {
-                return;
-            }
-            ctx.drawImage(homeImg, 230, this.canvas.height - 240, 150, 150);
-        });
 
-        const awayImg = new Image();
-        awayImg.src = this.awayPokemon.pokemon.sprites.front_default;
-        awayImg.addEventListener('load', () => {
-            if(this.concluded) {
-                return;
-            }
-            ctx.drawImage(awayImg, this.canvas.width - 364, 150, 150, 150);
-        }); 
+        // const homeImg = new Image();
+        // homeImg.src = this.homePokemon.pokemon.sprites.back_default;
+        // homeImg.addEventListener('load', () => {
+        //     if(this.concluded) {
+        //         return;
+        //     }
+        //     ctx.drawImage(homeImg, 230, this.canvas.height - 240, 150, 150);
+        // });
+
+        // const awayImg = new Image();
+        // awayImg.src = this.awayPokemon.pokemon.sprites.front_default;
+        // awayImg.addEventListener('load', () => {
+        //     if(this.concluded) {
+        //         return;
+        //     }
+        //     ctx.drawImage(awayImg, this.canvas.width - 364, 150, 150, 150);
+        // }); 
         if (this.battleLog.length > 0) {
             ctx.fillStyle = 'black';
             ctx.font = 'bold 24px Pixelify Sans';
