@@ -38,9 +38,9 @@ async function startNPCBattle(player,music,pinger) {
 
     let bs=new BattleSimulator(player.getPokemon(0), npc.player.getPokemon(0), "battle-arena" , music,pinger,npc,npc.simulatorBinding);
     bs.draw()
+    bs.setOpponent(npc.player)
     
     bs.setPlayer(player)
-    bs.setOpponent(npc.player)
     await bs.initMoves()
 
 

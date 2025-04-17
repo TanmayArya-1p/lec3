@@ -359,6 +359,11 @@ class BattleSimulator {
         this.homePlayerCard.querySelector('img').src = "../assets/" + player.char.toLowerCase() + ".png";
         this.homePlayerCard.querySelector('img').alt = player.char;
         this.homePlayerCard.querySelector('h2').innerText = player.nick;
+        if(this.awayPlayer.isRTC && this.awayPlayer.arenaIDX === -1) {
+            console.log("SKIPPED LOCAL ARENA SYNC")
+            return;
+        }
+
         switch(this.homePlayer.arenaIDX) {
             case 0:
                 document.getElementById("battle-bg").src = "../assets/battle.gif"

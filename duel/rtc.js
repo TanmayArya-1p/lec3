@@ -146,15 +146,19 @@ class RTCPlayer {
             console.log('RECV:', e)
             if (!this.player) {
                 this.player = JSON.parse(e.data);
+                console.log("SYNCING" , this.isOfferer, this.player.arenaIDX);
                 if(this.isOfferer) {
                     switch (this.player.arenaIDX) {
                         case 0:
+                            console.log("ARENA 0")
                             document.getElementById('battle-bg').src = "../assets/battle.gif";
                             break;
                         case 1:
+                            console.log("ARENA 1")
                             document.getElementById('battle-bg').src = "../assets/battle-2.png";
                             break;
                     }
+                    this.player.arenaIDX= -1
                 }
                 console.log('Player data received:', this.player);
                 this.player.isRTC = true
@@ -188,8 +192,9 @@ class RTCPlayer {
 
 async function initiateRTCBattle(rtcplayer,music,pinger){
     let bs = new BattleSimulator(rtcplayer.homePlayer.team[0], rtcplayer.player.team[0], "battle-arena", music,pinger,null,null,(movestring)=>rtcplayer.send(`${movestring}`) );
-    bs.setPlayer(rtcplayer.homePlayer)
     bs.setOpponent(rtcplayer.player)
+    
+    bs.setPlayer(rtcplayer.homePlayer)
     rtcplayer.BSAddChatMessage = (message) => bs.addChatMessage(message , "away");
     await bs.draw()
     if(!rtcplayer.isOfferer) {
