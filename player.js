@@ -38,6 +38,7 @@ class Player {
             nick: player.nick,
             xp: player.xp,
             char: player.char,
+            arenaIDX: player.arenaIDX,
             team: [
                 {
                     name: player.team[0].name,
@@ -54,7 +55,6 @@ class Player {
                     power: player.team[0].power,
                     types: player.team[0].types,
                     stats: player.team[0].stats,
-                    arenaIDX: player.arenaIDX,
                     moves: player.team[0].moves.map((move) => {
                         return {
                             name: move.name,
