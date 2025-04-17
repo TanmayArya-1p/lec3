@@ -4,10 +4,16 @@ import Player from '../player.js';
 class RTCPlayer {
     constructor(homePlayer,music,pinger,moveMakeCallback=null) {
         this.peerConnection = new RTCPeerConnection({
-            iceServers : [
-                { urls: "stun:stun.3clogic.com:3478" }
+            iceServers: [
+                { urls: "stun:stun.3clogic.com:3478" },
+                {
+                    urls: "turn:167.71.226.217:3478",
+                    username: "tcan",
+                    credential: "lmao"
+                }
             ]
         });
+        
         this.BSAddChatMessage = null
         this.homePlayer = homePlayer;
         this.player = null
