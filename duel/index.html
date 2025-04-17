@@ -115,7 +115,7 @@
 
     <div id="duel-main-page" class="vc-div-contents" style="height: 100vh;margin-top: 2rem;gap: 2rem;">
         <a style="font-size: 1.5rem;text-align: center;">
-            Welcome to PokéLAN Duel Mode! You can battle against other trainers on the same LAN or battle NPCs to gain XP and unlock new Pokémons.
+            Welcome to PokéLAN Duel Mode! You can battle against other trainers over the internet or battle NPCs to gain XP and unlock new Pokémons.
         </a>
         <div style="display: flex; flex-direction: row; gap: 1rem;width: 90%; justify-content: center">
             <div style="display: flex;flex-direction: row;gap:8rem;padding: 2rem;height: fit-content;" class="aw-card">
@@ -150,7 +150,10 @@
                 <button class="attack-button" id="npc-battle-start">Battle an NPC</button>
                 <div class="aw-card" style="width: 60%;">
                     <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
-                        <h2 style="text-align: center;">RTC Battle</h2>
+                        <div>
+                            <h2 style="text-align: center;">RTC Battle (PvP)</h2>
+                            <h5>Scroll down for instructions</h5>
+                        </div>
                         <div class="lds-dual-ring" id="rtc-loader"></div>
 
                         <div style="display: none; flex-direction: column; gap: 0.5rem; align-items: center;" id="rtc-connect">
