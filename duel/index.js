@@ -36,5 +36,5 @@ initNavbar(player)
 let rtcPlayer = new RTCPlayer(player,music,ping);
 window.rtc = rtcPlayer
 
-document.getElementById('npc-battle-start').click()
+// document.getElementById('npc-battle-start').click()
 
