@@ -12,6 +12,7 @@ class Music {
         this.unmute.style.display = "none";
 
         this.control.addEventListener('click', () => this.togglePlayer());
+        this.preloadNonDefaults()
     }
 
     updateUI(isPlaying) {
@@ -44,6 +45,18 @@ class Music {
             this.updateUI(false);
         }
     }
+    preloadNonDefaults() {
+        this.nonDefaults.forEach((src) => {
+            console.log(`PRELOADING ${src}`);
+            const audio = document.createElement('audio');
+            audio.src = src;
+            audio.preload = 'auto';
+            document.body.appendChild(audio);
+            audio.load();
+            document.body.removeChild(audio);
+        });
+    }
+
 }
 
 class Pinger {
