@@ -304,9 +304,12 @@ class BattleSimulator {
         for(let i=0; i<this.homePokemon.pokemon.moves.length; i++){
             let move = this.homePokemon.pokemon.moves[i];
             let attackButton = document.getElementById(`attack-${i+1}`) 
-            move.pp = Math.floor(move.pp/2);
-            move.currPP = move.pp;
             
+            if(!move.reduced){
+                move.pp = Math.floor(move.pp/2);
+                move.reduced = true
+            }
+            move.currPP = move.pp;
             document.getElementById(`attack-${i+1}-text`).innerText = move.name;
             document.getElementById(`attack-${i+1}-pp`).innerText = "PP: "+move.currPP + " / "+ move.pp;
             document.getElementById(`attack-${i+1}-type`).innerText = move.type.name;
@@ -505,7 +508,9 @@ class BattleSimulator {
             this.musicResetCallback(this.music)
             offerReward(this.homePlayer,()=>{
                 displaySummaryModal(this.homePlayer,false)
-                window.location.reload()
+                if(this.endGameCallback) {
+                    this.endGameCallback();
+                }
             })
             while (this.battleLogContainer.children.length > 2) {
                 this.battleLogContainer.removeChild(this.battleLogContainer.lastChild);
@@ -514,13 +519,18 @@ class BattleSimulator {
             document.getElementById('attack-loader').style.display = "block";
             document.getElementById('attack-buttons-container').style.display = "flex";
             document.getElementById('chat-log').style.display = "none";
-            if(this.endGameCallback) {
-                this.endGameCallback();
-            }
+            
+            this.awayPokemonImage.src = ""
+            this.homePokemonImage.src = ""
             this.awayPokemonImage.style.display = "block"
             this.homePokemonImage.style.display = "block"
             
-
+            for(let i=0; i<this.homePokemon.pokemon.moves.length; i++){
+                let attackButton = document.getElementById(`attack-${i+1}`);
+                attackButton.disabled = false;
+                attackButton.style.opacity = 1;
+                attackButton.style.cursor = "hand";
+            }
 
         },7000)
 

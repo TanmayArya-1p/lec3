@@ -197,7 +197,7 @@ class RTCPlayer {
 }
 
 async function initiateRTCBattle(rtcplayer,music,pinger){
-    let bs = new BattleSimulator(rtcplayer.homePlayer.team[0], rtcplayer.player.team[0], "battle-arena", music,pinger,null,null,(movestring)=>rtcplayer.send(`${movestring}`) );
+    let bs = new BattleSimulator(rtcplayer.homePlayer.team[0], rtcplayer.player.team[0], "battle-arena", music,pinger,null,null,(movestring)=>rtcplayer.send(`${movestring}`),()=>window.location.reload() );
     bs.setOpponent(rtcplayer.player)
     
     bs.setPlayer(rtcplayer.homePlayer)
