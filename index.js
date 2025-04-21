@@ -54,3 +54,4 @@ document.querySelectorAll(`.character-option`).forEach(option => {
         await offerReward(player , () => displaySummaryModal(player));
     })
 });
+

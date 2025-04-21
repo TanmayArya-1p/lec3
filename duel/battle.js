@@ -243,8 +243,11 @@ class BattlePokemon {
 
 let bsInUse = false;
 
+
+
+
 class BattleSimulator {
-    constructor(homePokemon, awayPokemon , canvasID,music,pinger,npc=null,enemyMoveCallback=null,homeMoveHook=null,endGameCallback=null) {
+    constructor(homePokemons, awayPokemons , canvasID,music,pinger,npc=null,enemyMoveCallback=null,homeMoveHook=null,endGameCallback=null) {
         if(bsInUse) {
             console.error("BATTLE SIMULATOR ALREADY IN USE");
             return;
@@ -253,9 +256,14 @@ class BattleSimulator {
         this.pinger = pinger;
         this.homeMoveHook = homeMoveHook;
 
+        this.homeActiveIdx = 0
+        this.enemyActiveIdx = 0
+
         this.enemyMoveCallback = enemyMoveCallback;
-        this.homePokemon = new BattlePokemon(homePokemon);
-        this.awayPokemon = new BattlePokemon(awayPokemon);
+
+        this.homePokemons = homePokemons.map((pk) =>new BattlePokemon(pk)) 
+        this.awayPokemons = awayPokemons.map(pk => new BattlePokemon(pk));
+
         this.npc = npc;
         this.battleSimBox = document.getElementById('battle-sim');
         this.battleSimBox.style.display = 'flex';
@@ -291,18 +299,19 @@ class BattleSimulator {
         this.turnDisplay = document.getElementById('turn-display');
         this.turnDisplay.innerText = "Your Turn";
         this.turnDisplay.style.color = "#3b4cca";
-        this.homePokemonImage.src = this.homePokemon.pokemon.sprites.other.showdown.back_default;
-        this.awayPokemonImage.src = this.awayPokemon.pokemon.sprites.other.showdown.front_default;
+        this.homePokemonImage.src = this.homePokemons[this.homeActiveIdx].pokemon.sprites.other.showdown.back_default;
+        this.awayPokemonImage.src = this.awayPokemons[this.enemyActiveIdx].pokemon.sprites.other.showdown.front_default;
 
 
 
     }
     async initMoves() {
+        for(let i=0; i<this.homePokemons.length; i++) await this.homePokemons[i].hydrateMoves();
+        for(let i=0; i<this.awayPokemons.length; i++)  await this.awayPokemons[i].hydrateMoves();
 
-        await this.homePokemon.hydrateMoves();
-        await this.awayPokemon.hydrateMoves();
-        for(let i=0; i<this.homePokemon.pokemon.moves.length; i++){
-            let move = this.homePokemon.pokemon.moves[i];
+        
+        for(let i=0; i<this.homePokemons[this.homeActiveIdx].pokemon.moves.length; i++){
+            let move = this.homePokemons[this.homeActiveIdx].pokemon.moves[i];
             let attackButton = document.getElementById(`attack-${i+1}`) 
             
             if(!move.reduced){
@@ -422,22 +431,37 @@ class BattleSimulator {
     clearChatLog() {
         this.chatLog = [];
     }
-    attackAway(moveIDX) {
+    attackAway(moveIDX,switchpkg) {
         if(!this.isHomeTurn || this.concluded) {
             console.error("WRONG TURN");
             return;
         }
-        const damage = this.homePokemon.attack(this.awayPokemon, this.homePokemon.pokemon.moves[moveIDX]);
-        this.addBattleLog(`${this.homePokemon.pokemon.name} used ${this.homePokemon.pokemon.moves[moveIDX].name} on ${this.awayPokemon.pokemon.name} for ${damage} damage.` , "home");
+        if(switchpkg) {
+            if(!this.homePokemons[this.homeActiveIdx].isFainted()) {
+                this.toggleTurnDisplay();
+                this.isHomeTurn = !this.isHomeTurn;
+            }
+            this.HomeSwitchPokemon(moveIDX).then(this.draw());
+            this.addBattleLog(`Switched Pokemon to ${this.homePokemons[this.homeActiveIdx].pokemon.name}`,"home");
+            if(this.enemyMoveCallback) {
+                this.enemyMoveCallback(this,this.npc);
+            }
+            //TODO: HOME MOVE HOOK HERE
+            return;
+
+        }
+
+        const damage = this.homePokemons[this.homeActiveIdx].attack(this.awayPokemons[this.enemyActiveIdx], this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX]);
+        this.addBattleLog(`${this.homePokemons[this.homeActiveIdx].pokemon.name} used ${this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX].name} on ${this.awayPokemons[this.enemyActiveIdx].pokemon.name} for ${damage} damage.` , "home");
 
         if(this.homeMoveHook) this.homeMoveHook(moveIDX+"|"+damage)
 
-        this.homePokemon.pokemon.moves[moveIDX].currPP = this.homePokemon.pokemon.moves[moveIDX].currPP - 1
-        document.getElementById(`attack-${moveIDX+1}-pp`).innerText = "PP: " + this.homePokemon.pokemon.moves[moveIDX].currPP+ " / "+ this.homePokemon.pokemon.moves[moveIDX].pp;
+        this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX].currPP = this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX].currPP - 1
+        document.getElementById(`attack-${moveIDX+1}-pp`).innerText = "PP: " + this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX].currPP+ " / "+ this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX].pp;
 
 
 
-        if(this.homePokemon.pokemon.moves[moveIDX].currPP === 0) {
+        if(this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX].currPP === 0) {
             const attackButton = document.getElementById(`attack-${moveIDX+1}`);
             attackButton.disabled = true;
             attackButton.style.opacity = 0.5;
@@ -450,8 +474,8 @@ class BattleSimulator {
         if(this.enemyMoveCallback) {
             this.enemyMoveCallback(this,this.npc);
         }
-        if (this.awayPokemon.isFainted()) {
-            this.addBattleLog(`${this.awayPokemon.pokemon.name} fainted!` , "away");
+        if (this.awayPokemons[this.enemyActiveIdx].isFainted()) {
+            this.addBattleLog(`${this.awayPokemons[this.enemyActiveIdx].pokemon.name} fainted!` , "away");
             this.draw().then(()=>this.conclude("home"))
         }
         else{
@@ -460,19 +484,30 @@ class BattleSimulator {
         this.toggleTurnDisplay();
 
     }
-    attackHome(moveIDX,damage=null) {
+    attackHome(moveIDX,damage=null,switchpkg=false) {
         if(this.isHomeTurn || this.concluded) {
             console.error("WRONG TURN");
             return;
         }
+        if(switchpkg) {
+            if(!this.awayPokemons[this.enemyActiveIdx].isFainted()) {
+                this.toggleTurnDisplay();
+                this.isHomeTurn = !this.isHomeTurn;
+            }
+            this.AwaySwitchPokemon(moveIDX).then(this.draw());
+            this.addBattleLog(`Switched Pokemon to ${this.homePokemons[this.homeActiveIdx].pokemon.name}`,"away");
+            return;
 
-        damage = this.awayPokemon.attack(this.homePokemon, this.awayPokemon.pokemon.moves[moveIDX],damage);
-        this.addBattleLog(`${this.awayPokemon.pokemon.name} used ${this.awayPokemon.pokemon.moves[moveIDX].name} on ${this.homePokemon.pokemon.name} for ${damage} damage.`,"away");
+        }
+
+
+        damage = this.awayPokemons[this.enemyActiveIdx].attack(this.homePokemons[this.homeActiveIdx], this.awayPokemons[this.enemyActiveIdx].pokemon.moves[moveIDX],damage);
+        this.addBattleLog(`${this.awayPokemons[this.enemyActiveIdx].pokemon.name} used ${this.awayPokemons[this.enemyActiveIdx].pokemon.moves[moveIDX].name} on ${this.homePokemons[this.homeActiveIdx].pokemon.name} for ${damage} damage.`,"away");
 
         this.isHomeTurn = !this.isHomeTurn;
-        ;
-        if (this.homePokemon.isFainted()) {
-            this.addBattleLog(`${this.homePokemon.pokemon.name} fainted!` , "home");
+        
+        if (this.homePokemons[this.homeActiveIdx].isFainted()) {
+            this.addBattleLog(`${this.awayPokemons[this.enemyActiveIdx].pokemon.name} fainted!` , "home");
             this.draw().then(()=>this.conclude("away"))
         } else{
             this.draw();
@@ -480,6 +515,52 @@ class BattleSimulator {
         this.toggleTurnDisplay();
 
     }
+
+    async HomeSwitchPokemon(idx) {
+        if(this.isHomeTurn || this.concluded) {
+            console.error("WRONG TURN");
+            return;
+        }
+
+
+
+        if(this.homePokemons[idx].isFainted()) {
+            console.error("POKEMON FAINTED");
+            return;
+        }
+        
+        this.homeActiveIdx = idx;
+        this.homePokemonImage.src = this.homePokemons[this.homeActiveIdx].pokemon.sprites.other.showdown.back_default;
+        this.homePokemonImage.style.display = "block"
+        this.homePokemonImage.style.opacity = 1
+
+        for(let i=0; i<this.homePokemons[this.homeActiveIdx].pokemon.moves.length; i++){
+            let attackButton = document.getElementById(`attack-${i+1}`);
+            attackButton.disabled = false;
+            attackButton.style.opacity = 1;
+            attackButton.style.cursor = "hand";
+
+        }
+        this.initMoves()
+        this.draw();
+    }
+    async AwaySwitchPokemon(idx) {
+        if(!this.isHomeTurn || this.concluded) {
+            console.error("WRONG TURN");
+            return;
+        }
+        if(this.awayPokemons[idx].isFainted()) {
+            console.error("POKEMON FAINTED");
+            return;
+        }
+        this.enemyActiveIdx = idx;
+        this.awayPokemonImage.src = this.awayPokemons[this.enemyActiveIdx].pokemon.sprites.other.showdown.front_default;
+        this.awayPokemonImage.style.display = "block"
+        this.awayPokemonImage.style.opacity = 1
+        this.draw();
+    }
+
+
     conclude(winner){
         this.concluded = true;
         if(winner == "home") {
@@ -525,7 +606,7 @@ class BattleSimulator {
             this.awayPokemonImage.style.display = "block"
             this.homePokemonImage.style.display = "block"
             
-            for(let i=0; i<this.homePokemon.pokemon.moves.length; i++){
+            for(let i=0; i<this.homePokemons[this.homeActiveIdx].pokemon.moves.length; i++){
                 let attackButton = document.getElementById(`attack-${i+1}`);
                 attackButton.disabled = false;
                 attackButton.style.opacity = 1;
@@ -577,29 +658,29 @@ class BattleSimulator {
         ctx.fillStyle = 'red';
         ctx.fillRect(270, this.canvas.height - 100, 80, 5);
         ctx.fillStyle = 'green';
-        ctx.fillRect(270, this.canvas.height - 100, (this.homePokemon.hp / this.homePokemon.pokemon.stats.hp) * 80, 5);
+        ctx.fillRect(270, this.canvas.height - 100, (this.homePokemons[this.homeActiveIdx].hp / this.homePokemons[this.homeActiveIdx].pokemon.stats.hp) * 80, 5);
 
         ctx.fillStyle = 'black';
         ctx.font = '20px Pixelify Sans';
-        ctx.fillText(`HP (${this.homePokemon.hp} / ${this.homePokemon.pokemon.stats.hp})`, 150, this.canvas.height - 92);
+        ctx.fillText(`HP (${this.homePokemons[this.homeActiveIdx].hp} / ${this.homePokemons[this.homeActiveIdx].pokemon.stats.hp})`, 150, this.canvas.height - 92);
         
         ctx.fillStyle = 'black';
         ctx.font = '20px Pixelify Sans';
-        ctx.fillText(this.homePokemon.pokemon.name, 150, this.canvas.height - 60);
+        ctx.fillText(this.homePokemons[this.homeActiveIdx].pokemon.name, 150, this.canvas.height - 60);
 
 
         ctx.fillStyle = 'red';
         ctx.fillRect(this.canvas.width - 324, 280, 80, 5);
         ctx.fillStyle = 'green';
-        ctx.fillRect(this.canvas.width - 324, 280, (this.awayPokemon.hp / this.awayPokemon.pokemon.stats.hp) * 80, 5);
+        ctx.fillRect(this.canvas.width - 324, 280, (this.awayPokemons[this.enemyActiveIdx].hp / this.awayPokemons[this.enemyActiveIdx].pokemon.stats.hp) * 80, 5);
 
         ctx.fillStyle = 'black';    
         ctx.font = '20px Pixelify Sans';
-        ctx.fillText(`HP (${this.awayPokemon.hp} / ${this.awayPokemon.pokemon.stats.hp})`, this.canvas.width - 440  , 288);  
+        ctx.fillText(`HP (${this.awayPokemons[this.enemyActiveIdx].hp} / ${this.awayPokemons[this.enemyActiveIdx].pokemon.stats.hp})`, this.canvas.width - 440  , 288);  
 
         ctx.fillStyle = 'black';
         ctx.font = '20px Pixelify Sans';
-        ctx.fillText(this.awayPokemon.pokemon.name, this.canvas.width - 440 , 320);
+        ctx.fillText(this.awayPokemons[this.enemyActiveIdx].pokemon.name, this.canvas.width - 440 , 320);
         return 0;
     }
 }

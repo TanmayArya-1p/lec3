@@ -79,7 +79,7 @@ class RTCPlayer {
         });
 
         document.getElementById('set-answer').addEventListener('click', async () => {
-            const answerSdp = atob(document.getElementById('remote-sdp').value);
+            const answerSdp = atob(document.getElementById('remote-sdp').value.trim());
             await this.setRemoteDescription({
                 type: 'answer',
                 sdp: this.sanitizeSdp(answerSdp)
@@ -136,6 +136,7 @@ class RTCPlayer {
     }
 
     sanitizeSdp(sdp) {
+        sdp = sdp.trim();
         return sdp.replace(/a=msid-semantic: WMS/g, 'a=msid-semantic:WMS').replace(/\r\n/g, '\n').replace(/\n/g, '\r\n').replace(/a=candidate:.* (raddr|rport) 0(\r\n|\n)/g, '');
     }
     setupDataChannel() {
@@ -197,7 +198,7 @@ class RTCPlayer {
 }
 
 async function initiateRTCBattle(rtcplayer,music,pinger){
-    let bs = new BattleSimulator(rtcplayer.homePlayer.team[0], rtcplayer.player.team[0], "battle-arena", music,pinger,null,null,(movestring)=>rtcplayer.send(`${movestring}`),()=>window.location.reload() );
+    let bs = new BattleSimulator([rtcplayer.homePlayer.team[0]], [rtcplayer.player.team[0]], "battle-arena", music,pinger,null,null,(movestring)=>rtcplayer.send(`${movestring}`),()=>window.location.reload() );
     bs.setOpponent(rtcplayer.player)
     
     bs.setPlayer(rtcplayer.homePlayer)

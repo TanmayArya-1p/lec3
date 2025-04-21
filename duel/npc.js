@@ -26,7 +26,7 @@ class NPC {
     simulatorBinding(bs,npc) {
         let npcresptemp = npc.npcResponse;
         setTimeout(() => {
-            bs.attackHome(npcresptemp(bs.awayPokemon.pokemon.moves));
+            bs.attackHome(npcresptemp(bs.awayPokemons[bs.enemyActiveIdx].pokemon.moves));
         }, npc.wait);
     }
 }
@@ -36,10 +36,10 @@ async function startNPCBattle(player,music,pinger) {
     const npc = new NPC();
     await npc.player.getPokemon(0).hydrateData();
 
-    let bs=new BattleSimulator(player.getPokemon(0), npc.player.getPokemon(0), "battle-arena" , music,pinger,npc,npc.simulatorBinding);
+    let bs=new BattleSimulator([player.getPokemon(0),player.getPokemon(1),player.getPokemon(0),player.getPokemon(0)], [npc.player.getPokemon(0)], "battle-arena" , music,pinger,npc,npc.simulatorBinding);
     bs.draw()
     bs.setOpponent(npc.player)
-    
+    window.npcbs = bs;
     bs.setPlayer(player)
     await bs.initMoves()
 
