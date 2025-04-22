@@ -59,7 +59,7 @@ function capitalizeName(s) {
 
 
 function dimensionCheck(path) {
-    if (window.innerWidth < window.innerHeight) {
+    if ((window.innerWidth < 400 && window.innerHeight < 400) || (window.innerWidth < window.innerHeight)) {
         window.location.href = "/forbidden.html?"+"back="+path;
     }
 }

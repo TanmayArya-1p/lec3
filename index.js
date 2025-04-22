@@ -6,7 +6,7 @@ import initBanners from './banners.js';
 import { offerReward } from './rewards.js';
 import { dimensionCheck, displaySummaryModal } from './utils.js';
 
-
+dimensionCheck("/")
 window.addEventListener('resize' ,()=>dimensionCheck("/"))
 initBanners()
 
