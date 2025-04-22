@@ -192,7 +192,11 @@
 
             <div class="aw-card vc-div-contents" style="height: fit-content;gap:1rem; width: 40%;">
                 <h2>Battle Options</h2>
-                <button class="attack-button" id="npc-battle-start">Battle an NPC</button>
+                <button class="attack-button" style="display: flex; flex-direction: row; gap: 1rem;" id="npc-battle-start">
+                    Battle an NPC
+                    <div class="loader" id="npc-loader" style="display: none;"></div>
+
+                </button>
                 <div class="aw-card" style="width: 60%;">
                     <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
                         <div>

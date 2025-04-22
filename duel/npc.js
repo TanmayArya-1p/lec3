@@ -50,11 +50,13 @@ class NPC {
 
 
 async function startNPCBattle(player,music,pinger) {
+    document.getElementById("npc-loader").style.display = "flex";
     let ct = Math.max(Math.min(player.team.length, teamBattleCount),2)
     const npc = new NPC(ct);
 
-    for(let i=0;i<ct;i++){
+    
 
+    for(let i=0;i<ct;i++){
         await npc.player.getPokemon(i).hydrateData();
     }
 
@@ -72,6 +74,8 @@ async function startNPCBattle(player,music,pinger) {
     const npcTeam = Array.from({length: ct}, (_, i) => npc.player.getPokemon(i));
     let bs = new BattleSimulator(playerTeam, npcTeam, "battle-arena", music, pinger, npc, npc.simulatorBinding,null,()=>window.location.reload());
     bs.draw()
+    document.getElementById("npc-loader").style.display = "none";
+
     bs.setOpponent(npc.player)
     window.npcbs = bs;
     bs.setPlayer(player)

@@ -32,21 +32,22 @@ async function displaySummaryModal(player,modal=true) {
         if(!modal) {
             if(i<teamBattleCount) {
                 pokemonIsMain.innerText = "[MAIN]";
-                pokemonIsMain.classList.add('blue-white-header');
-            }
-            else{   
-                    pokemonIsMain.classList.add("click-to-add")
-                    pokemonIsMain.classList.add("ping")
+                pokemonIsMain.classList.add('blue-white-header');+
 
-                    pokemonIsMain.addEventListener('click', function () {
-                        let movedPokemon = player.team.splice(i, 1)[0];
-                        player.team.unshift(movedPokemon);
-                        player.saveState();
-
-                        displaySummaryModal(player,false);
-                    }
-                )
             }
+
+            pokemonIsMain.classList.add("click-to-add")
+            pokemonIsMain.classList.add("ping")
+
+            pokemonIsMain.addEventListener('click', function () {
+                let movedPokemon = player.team.splice(i, 1)[0];
+                player.team.unshift(movedPokemon);
+                player.saveState();
+
+                displaySummaryModal(player,false);
+            }
+        )
+
         }
         pokemonTeamContainer.appendChild(pokemonCard);
     }
