@@ -18,6 +18,7 @@ async function offerReward(player,callback=null) {
 
 
     const pokemonSelectionContainer = document.getElementById('pokemon-starter-selector');
+    let pokemonRewardContainers = []
     for (let i = 0; i < pokemons.length; i++) {
         document.getElementById("pokemon-selection-modal").style.display = 'flex';
         const pokemon = pokemons[i];
@@ -36,14 +37,21 @@ async function offerReward(player,callback=null) {
             }
             
         );
-        pokemonElement.style.display= 'block';
+        pokemonElement.style.display= 'none';
         const pokemonImage = pokemonElement.querySelector('img');
         pokemonImage.src = pokemon.sprites.front_default;
+        await new Promise(resolve => {
+            pokemonImage.onload = resolve;
+        });
         pokemonImage.alt = pokemon.name;
         pokemonElement.querySelector("h2").innerText = pokemon.name;
 
         pokemonSelectionContainer.appendChild(pokemonElement);
+        pokemonRewardContainers.push(pokemonElement);
     }   
+    for (let i = 0; i < pokemons.length; i++) {
+        pokemonRewardContainers[i].style.display = 'block';
+    }
     document.getElementById('pokemon-selector-loader').style.display = "none";
 
 }
