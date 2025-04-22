@@ -449,8 +449,10 @@ class BattleSimulator {
                     this.enemyMoveCallback(this,this.npc,false);
                 }
             }
+            this.homeMoveHook(moveIDX+"|"+"switch")
 
-            //TODO: HOME MOVE HOOK HERE
+            //TODO: TELL REMOTE WHEN WE SWTICH: HOME MOVE HOOK HERE
+            //TODO: SYNC REMOTE SWITCHES SOMEHOW
             return;
 
         }

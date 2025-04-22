@@ -144,7 +144,7 @@ body {
     font-family: 'Pixelify Sans', sans-serif;
 }
 #chat-log {
-    width: 40%; 
+    width: 20%; 
     height: 14rem; 
     background-color: antiquewhite; 
     border-radius: 10px; 
@@ -164,7 +164,7 @@ body {
 #battle-accessories {
     display: flex; 
     flex-direction: row; 
-    width:70%;
+    width:80%;
     gap: 2rem;
 }
 #logout-button {

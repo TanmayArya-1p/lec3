@@ -1,4 +1,5 @@
 import { BattleSimulator } from "./battle.js";
+import {teamBattleCount} from '../consts.js';
 import Player from '../player.js';
 
 class RTCPlayer {
@@ -177,7 +178,11 @@ class RTCPlayer {
                         this.BSAddChatMessage(ms[1]);
                     }
                 } else{
-                    this.moveMakeCallback(parseInt(ms[0], 10),parseInt(ms[1], 10));
+                    if(ms[1] === "switch") {
+                        this.moveMakeCallback(parseInt(ms[0], 10),0,true);
+                    } else {
+                        this.moveMakeCallback(parseInt(ms[0], 10),parseInt(ms[1], 10));
+                    }
                 }
             }
         };
@@ -197,7 +202,7 @@ class RTCPlayer {
 }
 
 async function initiateRTCBattle(rtcplayer,music,pinger){
-    let bs = new BattleSimulator([rtcplayer.homePlayer.team[0]], [rtcplayer.player.team[0]], "battle-arena", music,pinger,null,null,(movestring)=>rtcplayer.send(`${movestring}`),()=>window.location.reload() );
+    let bs = new BattleSimulator(rtcplayer.homePlayer.team.slice(0,teamBattleCount), rtcplayer.player.team, "battle-arena", music,pinger,null,null,(movestring)=>rtcplayer.send(`${movestring}`),()=>window.location.reload() );
     bs.setOpponent(rtcplayer.player)
     
     bs.setPlayer(rtcplayer.homePlayer)
@@ -208,8 +213,8 @@ async function initiateRTCBattle(rtcplayer,music,pinger){
     }
     await bs.initMoves()
 
-    rtcplayer.moveMakeCallback = (idx,damage) => {
-        bs.attackHome(idx,damage);
+    rtcplayer.moveMakeCallback = (idx,damage,isswitch=false) => {
+        bs.attackHome(idx,damage,isswitch);
     }
 }
 
