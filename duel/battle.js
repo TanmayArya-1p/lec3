@@ -605,7 +605,7 @@ class BattleSimulator {
             return;
         }
         this.enemyActiveIdx = idx;
-        
+
         this.awayPokemonImage.src = this.awayPokemons[this.enemyActiveIdx].pokemon.sprites.other.showdown.front_default;
         this.awayPokemonImage.style.display = "block";
         this.awayPokemonImage.onload = () => {
@@ -637,15 +637,16 @@ class BattleSimulator {
             pokeNode.querySelector('.pkg-selector-img').src = poke.pokemon.sprites.front_default;
             pokeNode.querySelector('.pkg-selector-hp').innerText = "HP: "+poke.hp;
 
-            pokeNode.addEventListener('click', () => {
-                if(this.homeActiveIdx == i) {
-                    return;
-                }
-                this.attackAway(i , true);
-            });
             if(poke.isFainted()) {
                 pokeNode.style.opacity = 0.5;
                 pokeNode.style.cursor = "not-allowed";
+            } else{
+                pokeNode.addEventListener('click', () => {
+                    if(this.homeActiveIdx == i) {
+                        return;
+                    }
+                    this.attackAway(i , true);
+                });
             }
             p1PokeList.appendChild(pokeNode);
         }

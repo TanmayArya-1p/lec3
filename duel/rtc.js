@@ -136,7 +136,6 @@ class RTCPlayer {
     }
 
     sanitizeSdp(sdp) {
-        sdp = sdp.trim();
         return sdp.replace(/a=msid-semantic: WMS/g, 'a=msid-semantic:WMS').replace(/\r\n/g, '\n').replace(/\n/g, '\r\n').replace(/a=candidate:.* (raddr|rport) 0(\r\n|\n)/g, '');
     }
     setupDataChannel() {
@@ -153,7 +152,7 @@ class RTCPlayer {
             console.log('RECV:', e)
             if (!this.player) {
                 this.player = JSON.parse(e.data);
-                console.log("SYNCING" , this.isOfferer, this.player.arenaIDX);
+                console.log("SYNCING" ,this.player);
                 if(this.isOfferer) {
                     switch (this.player.arenaIDX) {
                         case 0:

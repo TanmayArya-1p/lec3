@@ -1,3 +1,5 @@
+import { teamBattleCount } from './consts.js';
+
 class Player {
     constructor(nick, char, pokemons) {
         this.nick = nick;
@@ -39,35 +41,34 @@ class Player {
             xp: player.xp,
             char: player.char,
             arenaIDX: player.arenaIDX,
-            team: [
-                {
-                    name: player.team[0].name,
-                    code: player.team[0].code,
-                    sprites: {
-                        front_default: player.team[0].sprites.front_default,
-                        other: {
-                            showdown : {
-                                front_default: player.team[0].sprites.other.showdown.front_default,
-                                back_default: player.team[0].sprites.other.showdown.back_default
-                            }
-                        }
-                    },
-                    power: player.team[0].power,
-                    types: player.team[0].types,
-                    stats: player.team[0].stats,
-                    moves: player.team[0].moves.map((move) => {
-                        return {
-                            name: move.name,
-                            power: move.power,
-                            type: move.type,
-                            accuracy: move.accuracy,
-                            pp: move.pp,
-                            priority: move.priority
-                        }
+            team: player.team.slice(0, teamBattleCount).map((pokemon) => {
+            return {
+                name: pokemon.name,
+                code: pokemon.code,
+                sprites: {
+                front_default: pokemon.sprites.front_default,
+                other: {
+                    showdown: {
+                    front_default: pokemon.sprites.other.showdown.front_default,
+                    back_default: pokemon.sprites.other.showdown.back_default
                     }
-                    )
                 }
-            ]
+                },
+                power: pokemon.power,
+                types: pokemon.types,
+                stats: pokemon.stats,
+                moves: pokemon.moves.map((move) => {
+                return {
+                    name: move.name,
+                    power: move.power,
+                    type: move.type,
+                    accuracy: move.accuracy,
+                    pp: move.pp,
+                    priority: move.priority
+                }
+                })
+            }
+            })
         };
         return player
     }
