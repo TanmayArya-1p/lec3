@@ -32,7 +32,7 @@ async function displaySummaryModal(player,modal=true) {
         if(!modal) {
             if(i<teamBattleCount) {
                 pokemonIsMain.innerText = "[MAIN]";
-                pokemonIsMain.classList.add('blue-white-header');+
+                pokemonIsMain.classList.add('blue-white-header');
 
             }
 
