@@ -437,7 +437,6 @@ class BattleSimulator {
             return;
         }
         if(switchpkg) {
-            console.log("IS HOMEI FAINTED" , this.homePokemons[this.homeActiveIdx].isFainted())
             let faintflag = true
             if(!this.homePokemons[this.homeActiveIdx].isFainted()) {
                 faintflag = false
@@ -482,7 +481,15 @@ class BattleSimulator {
 
         if (this.awayPokemons[this.enemyActiveIdx].isFainted()) {
             this.addBattleLog(`${this.awayPokemons[this.enemyActiveIdx].pokemon.name} fainted!` , "away");
-            this.draw().then(()=>this.evaluateIfDone("home"))
+
+            const fadeDuration = 500;
+            this.awayPokemonImage.style.transition = `opacity ${fadeDuration}ms`;
+            this.awayPokemonImage.style.opacity = 0;
+            setTimeout(() => {
+                this.awayPokemonImage.style.display = "none";
+                this.draw().then(() => this.evaluateIfDone("home"));
+            }, fadeDuration);
+
             if(this.enemyMoveCallback) {
                 this.enemyMoveCallback(this,this.npc,true);
             }
@@ -549,7 +556,16 @@ class BattleSimulator {
         
         if (this.homePokemons[this.homeActiveIdx].isFainted()) {
             this.addBattleLog(`${this.homePokemons[this.homeActiveIdx].pokemon.name} fainted!` , "home");
-            this.draw().then(()=>this.evaluateIfDone("away"))
+            
+            const fadeDuration = 500;
+            this.homePokemonImage.style.transition = `opacity ${fadeDuration}ms`;
+            this.homePokemonImage.style.opacity = 0;
+            setTimeout(() => {
+                this.homePokemonImage.style.display = "none";
+                this.draw().then(() => this.evaluateIfDone("away"));
+            }, fadeDuration);
+
+
         } else{
             this.draw();
         }
@@ -564,9 +580,13 @@ class BattleSimulator {
         }
         
         this.homeActiveIdx = idx;
+
+
         this.homePokemonImage.src = this.homePokemons[this.homeActiveIdx].pokemon.sprites.other.showdown.back_default;
         this.homePokemonImage.style.display = "block"
-        this.homePokemonImage.style.opacity = 1
+        this.homePokemonImage.onload = () => {
+            this.homePokemonImage.style.opacity = 1;
+        };
 
         for(let i=0; i<this.homePokemons[this.homeActiveIdx].pokemon.moves.length; i++){
             let attackButton = document.getElementById(`attack-${i+1}`);
@@ -585,9 +605,14 @@ class BattleSimulator {
             return;
         }
         this.enemyActiveIdx = idx;
+        
         this.awayPokemonImage.src = this.awayPokemons[this.enemyActiveIdx].pokemon.sprites.other.showdown.front_default;
-        this.awayPokemonImage.style.display = "block"
-        this.awayPokemonImage.style.opacity = 1
+        this.awayPokemonImage.style.display = "block";
+        this.awayPokemonImage.onload = () => {
+            this.awayPokemonImage.style.opacity = 1;
+        };
+
+        
         this.draw();
     }
     initPokeList() {
