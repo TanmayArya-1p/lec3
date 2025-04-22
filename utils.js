@@ -1,3 +1,5 @@
+import { teamBattleCount } from './consts.js';
+
 async function displaySummaryModal(player,modal=true) {
     let tempTemplate = document.getElementById('pokemon-card-template').cloneNode(true);
     let pokemonTeamContainer  = document.getElementById('pokemon-team-container');
@@ -28,7 +30,7 @@ async function displaySummaryModal(player,modal=true) {
         pokemonCard.querySelector('#pokemon-hp').innerText = player.team[i].stats.hp;
         let pokemonIsMain = pokemonCard.querySelector('#pokemon-ismain');
         if(!modal) {
-            if(i==0) {
+            if(i<teamBattleCount) {
                 pokemonIsMain.innerText = "[MAIN]";
                 pokemonIsMain.classList.add('blue-white-header');
             }
@@ -37,9 +39,8 @@ async function displaySummaryModal(player,modal=true) {
                     pokemonIsMain.classList.add("ping")
 
                     pokemonIsMain.addEventListener('click', function () {
-                        let mainPokemon = player.getPokemon(0);
-                        player.team[0] = player.getPokemon(i);
-                        player.team[i] = mainPokemon;
+                        let movedPokemon = player.team.splice(i, 1)[0];
+                        player.team.unshift(movedPokemon);
                         player.saveState();
 
                         displaySummaryModal(player,false);

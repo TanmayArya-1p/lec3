@@ -10,6 +10,27 @@
     <link rel="stylesheet" href="../loader.css">
     <link rel="stylesheet" href="duel.css">
     <title>PokéLAN</title>
+    <style>
+        .pkg-button-selector {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            font-family: 'Pixelify Sans', sans-serif;
+            background-color: antiquewhite;
+            border: 0.1rem;
+        }
+        .pkg-button-selector:hover {
+            transform: translate(0, -5px);
+        }
+    </style>
 </head>
 <body>
     <nav id="navbar">
@@ -30,10 +51,22 @@
     <div id="battle-sim" style="display:none">
 
         <div id="battle-container">
-            <div id="player-1-card" class="blue-white-header player-card">
-                <h2 style="text-align: center;"></h2>                
-                <img src="../assets/gary.png" alt="Gary" class="character-selection-image" style="width: auto; height: 8rem;">
-            </div>           
+            <div>
+                <div id="player-1-card" class="blue-white-header player-card">
+                    <h2 style="text-align: center;"></h2>                
+                    <img src="../assets/gary.png" alt="Gary" class="character-selection-image" style="width: auto; height: 8rem;">
+                </div>   
+                <div id="player-1-pokelist" class="pokelist-card">
+                    <button id="pkg-selector-template" class="pkg-button-selector ping" style="display: none;">
+                        <img class="pkg-selector-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/132.png" style="width: 2rem; height: 2rem;">
+                        <div style="display: flex; flex-direction: column; text-align: right;">
+                            <span style="font-size: 0.8rem;" class="pkg-selector-name">Pikachu</span>
+                            <span style="font-size: 0.5rem;" class="pkg-selector-hp">HP: 100</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+       
              
             <div id="battle-wrapper">
                 <img id="battle-bg" style="border-radius: 1rem" src="../assets/battle.gif" alt="Background" />
@@ -45,10 +78,22 @@
                 </div>
             </div>
 
-            <div id="player-2-card" class="blue-white-header player-card">
-                <h2 style="text-align: center;color: #ff0000;"></h2>                
-                <img src="../assets/gary.png" alt="Gary" class="character-selection-image" style="width: auto; height: 8rem;">
+            <div>
+                <div id="player-2-card" class="blue-white-header player-card">
+                    <h2 style="text-align: center;color: #ff0000;"></h2>                
+                    <img src="../assets/gary.png" alt="Gary" class="character-selection-image" style="width: auto; height: 8rem;">
+                </div>                
+                <div id="player-2-pokelist" class="pokelist-card">
+                    <button id="pkg-selector-template-enemy" class="pkg-button-selector ping" style="display: none;" disabled>
+                        <img class="pkg-selector-img" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/132.png" style="width: 2rem; height: 2rem;">
+                        <div style="display: flex; flex-direction: column; text-align: right;">
+                            <span style="font-size: 0.8rem;" class="pkg-selector-name">Pikachu</span>
+                            <span style="font-size: 0.5rem;" class="pkg-selector-hp">HP: 100</span>
+                        </div>
+                    </button>
+                </div>
             </div>
+
 
         </div>
 
