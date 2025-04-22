@@ -132,7 +132,24 @@ body {
     padding: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+img.pokemon-image-shake {
+    animation: shake 0.5s;
+    animation-iteration-count: infinite;
+}
 
+@keyframes shake {
+    0% { transform: translate(2px, 2px) rotate(0deg); }
+    10% { transform: translate(-2px, -4px) rotate(-2deg); }
+    20% { transform: translate(-6px, 0px) rotate(2deg); }
+    30% { transform: translate(6px, 4px) rotate(0deg); }
+    40% { transform: translate(2px, -2px) rotate(2deg); }
+    50% { transform: translate(-2px, 4px) rotate(-2deg); }
+    60% { transform: translate(-6px, 2px) rotate(0deg); }
+    70% { transform: translate(6px, 2px) rotate(-2deg); }
+    80% { transform: translate(-2px, -2px) rotate(2deg); }
+    90% { transform: translate(2px, 4px) rotate(0deg); }
+    100% { transform: translate(2px, -4px) rotate(-2deg); }
+}
 
 #battle-log {
     width: 30%; 

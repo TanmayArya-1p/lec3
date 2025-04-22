@@ -441,9 +441,16 @@ class BattleSimulator {
         this.chatLog = [];
     }
     attackAway(moveIDX,switchpkg) {
+
         if(!this.isHomeTurn || this.concluded) {
             console.error("WRONG TURN");
             return;
+        }
+        if(!switchpkg) {
+            this.awayPokemonImage.classList.add("pokemon-image-shake")
+            setTimeout(() => {
+                this.awayPokemonImage.classList.remove("pokemon-image-shake")
+            }, 500);    
         }
         if(switchpkg) {
             let faintflag = true
@@ -459,9 +466,6 @@ class BattleSimulator {
                 }
             }
             if(this.homeMoveHook) this.homeMoveHook(moveIDX+"|"+"switch")
-
-            //TODO: TELL REMOTE WHEN WE SWTICH: HOME MOVE HOOK HERE
-            //TODO: SYNC REMOTE SWITCHES SOMEHOW
             return;
 
         }
@@ -540,11 +544,17 @@ class BattleSimulator {
 
 
     attackHome(moveIDX,damage=null,switchpkg=false) {
-
         if(this.isHomeTurn || this.concluded) {
             console.error("WRONG TURN");
             return;
         }
+        if(!switchpkg) {
+            this.homePokemonImage.classList.add("pokemon-image-shake")
+            setTimeout(() => {
+                this.homePokemonImage.classList.remove("pokemon-image-shake")
+            }, 500);
+        }
+
         if(switchpkg) {
             if(!this.awayPokemons[this.enemyActiveIdx].isFainted()) {
                 this.toggleTurnDisplay();
@@ -769,6 +779,12 @@ class BattleSimulator {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(this.battleLog[this.battleLog.length - 1], this.canvas.width / 2, 60);
+        } else{
+            ctx.fillStyle = 'black';
+            ctx.font = 'bold 24px Pixelify Sans';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText("", this.canvas.width / 2, 60);
         }
 
 
