@@ -321,7 +321,7 @@ class BattleSimulator {
             }
 
             document.getElementById(`attack-${i+1}-text`).innerText = move.name;
-            document.getElementById(`attack-${i+1}-pp`).innerText = "PP: "+move.currPP + " / "+ move.pp;
+            document.getElementById(`attack-${i+1}-pp`).innerText = "PP "+move.currPP + "/"+ move.pp;
             document.getElementById(`attack-${i+1}-type`).innerText = move.type.name;
 
 
@@ -479,7 +479,7 @@ class BattleSimulator {
         if(this.homeMoveHook) this.homeMoveHook(moveIDX+"|"+damage)
 
         this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX].currPP = this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX].currPP - 1
-        document.getElementById(`attack-${moveIDX+1}-pp`).innerText = "PP: " + this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX].currPP+ " / "+ this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX].pp;
+        document.getElementById(`attack-${moveIDX+1}-pp`).innerText = "PP " + this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX].currPP+ "/"+ this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX].pp;
 
 
 
