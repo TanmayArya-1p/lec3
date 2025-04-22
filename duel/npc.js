@@ -8,15 +8,16 @@ const npcResponseStyles = {
 }
 
 class NPC {
-    constructor(wait=3000,npcResponse=npcResponseStyles.pureRandomness,name=null,pokemonCodes=null) {
+    constructor(teamSize=teamBattleCount,wait=3000,npcResponse=npcResponseStyles.pureRandomness,name=null,pokemonCodes=null) {
         if(name===null){
             name = "NPC " + npcNames[Math.floor(Math.random() * npcNames.length)];
         }
         this.pokemonCodes = []
         this.wait = wait
+        this.teamSize = teamSize;
         let char = trainerList[Math.floor(Math.random() * trainerList.length)];
         if(pokemonCodes===null){
-            for(let i=0;i<teamBattleCount;i++){
+            for(let i=0;i<teamSize;i++){
                 let pokemonCode = Math.floor(Math.random() * 30) + offsetMap[char]+1;
                 while(this.pokemonCodes.includes(pokemonCode)){
                     pokemonCode = Math.floor(Math.random() * 30) + offsetMap[char]+1;
@@ -35,7 +36,7 @@ class NPC {
     simulatorBinding(bs,npc,faintflag) {
         if(faintflag){
             setTimeout(() => {
-                bs.attackHome((bs.enemyActiveIdx+1)%teamBattleCount,null,true);
+                bs.attackHome((bs.enemyActiveIdx+1)%npc.teamSize,null,true);
                 npc.simulatorBinding(bs,npc,false);
             }, npc.wait);
             return;
@@ -49,9 +50,10 @@ class NPC {
 
 
 async function startNPCBattle(player,music,pinger) {
-    const npc = new NPC();
+    let ct = Math.max(Math.min(player.team.length, teamBattleCount),2)
+    const npc = new NPC(ct);
 
-    for(let i=0;i<teamBattleCount;i++){
+    for(let i=0;i<ct;i++){
 
         await npc.player.getPokemon(i).hydrateData();
     }
@@ -62,13 +64,12 @@ async function startNPCBattle(player,music,pinger) {
         if(curr===undefined){
             break;
         }
-        console.log("ADDING " , curr)
         if(!curr.hydrated) await curr.hydrateData()
         playerTeam.push(player.getPokemon(i));
     }
 
 
-    const npcTeam = Array.from({length: teamBattleCount}, (_, i) => npc.player.getPokemon(i));
+    const npcTeam = Array.from({length: ct}, (_, i) => npc.player.getPokemon(i));
     let bs = new BattleSimulator(playerTeam, npcTeam, "battle-arena", music, pinger, npc, npc.simulatorBinding,null,()=>window.location.reload());
     bs.draw()
     bs.setOpponent(npc.player)

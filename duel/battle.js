@@ -45,7 +45,6 @@ class BattlePokemon {
         }
 
         if(damage===null){
-            console.log(move)
             const stab = this.pokemon.types.map(a=>{
                 return a.name
             }).includes(move.type.name) ? 1.5 : 1;
@@ -305,7 +304,6 @@ class BattleSimulator {
 
     }
     async initMoves() {
-        console.log("INIT MOVES CALLED")
         for(let i=0; i<this.homePokemons.length; i++) await this.homePokemons[i].hydrateMoves();
         for(let i=0; i<this.awayPokemons.length; i++)  await this.awayPokemons[i].hydrateMoves();
 
@@ -320,10 +318,7 @@ class BattleSimulator {
             }
             if(!move.currPP) {
                 move.currPP = move.pp;
-            } else {
-                console.log("MOVE PP ALREADY EXISTS" , move.currPP)
             }
-
 
             document.getElementById(`attack-${i+1}-text`).innerText = move.name;
             document.getElementById(`attack-${i+1}-pp`).innerText = "PP: "+move.currPP + " / "+ move.pp;
