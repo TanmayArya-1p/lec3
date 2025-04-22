@@ -305,6 +305,7 @@ class BattleSimulator {
 
     }
     async initMoves() {
+        console.log("INIT MOVES CALLED")
         for(let i=0; i<this.homePokemons.length; i++) await this.homePokemons[i].hydrateMoves();
         for(let i=0; i<this.awayPokemons.length; i++)  await this.awayPokemons[i].hydrateMoves();
 
@@ -317,11 +318,28 @@ class BattleSimulator {
                 move.pp = Math.floor(move.pp/2);
                 move.reduced = true
             }
-            move.currPP = move.pp;
+            if(!move.currPP) {
+                move.currPP = move.pp;
+            } else {
+                console.log("MOVE PP ALREADY EXISTS" , move.currPP)
+            }
+
+
             document.getElementById(`attack-${i+1}-text`).innerText = move.name;
             document.getElementById(`attack-${i+1}-pp`).innerText = "PP: "+move.currPP + " / "+ move.pp;
             document.getElementById(`attack-${i+1}-type`).innerText = move.type.name;
 
+
+            if(move.currPP === 0) {
+                attackButton.disabled = true;
+                attackButton.style.opacity = 0.5;
+                attackButton.style.cursor = "not-allowed";
+            } else {
+                attackButton.disabled = false;
+                attackButton.style.opacity = 1;
+                attackButton.style.cursor = "hand";
+            }
+    
 
             attackButton.addEventListener('click', () => {
                 this.attackAway(i);
@@ -449,7 +467,7 @@ class BattleSimulator {
                     this.enemyMoveCallback(this,this.npc,false);
                 }
             }
-            this.homeMoveHook(moveIDX+"|"+"switch")
+            if(this.homeMoveHook) this.homeMoveHook(moveIDX+"|"+"switch")
 
             //TODO: TELL REMOTE WHEN WE SWTICH: HOME MOVE HOOK HERE
             //TODO: SYNC REMOTE SWITCHES SOMEHOW
@@ -716,6 +734,12 @@ class BattleSimulator {
                 attackButton.disabled = false;
                 attackButton.style.opacity = 1;
                 attackButton.style.cursor = "hand";
+            }
+
+            for(let i=0; i< this.homePokemons.length ; i++) {
+                for(let j=0; j<this.homePokemons[i].pokemon.moves.length; j++){
+                    this.homePokemons[i].pokemon.moves[j].currPP = this.homePokemons[i].pokemon.moves[j].pp;
+                }                
             }
 
         },7000)
