@@ -3,9 +3,10 @@ import { initNavbar } from "./navbar.js";
 import {Music, Pinger} from '../music.js';
 import { startNPCBattle } from "./npc.js";
 import { offerReward } from "../rewards.js";
-import { displaySummaryModal } from "../utils.js";
+import { displaySummaryModal ,dimensionCheck} from "../utils.js";
 import {RTCPlayer, initiateRTCBattle} from "./rtc.js";
 
+window.addEventListener('resize' ,() => dimensionCheck("/duel"))
 const music = new Music('../assets/music.mp3', ["../assets/happy.mp3", "../assets/battle-music.mp3"])
 const ping = new Pinger('../assets/bubble.mp3', 'ping');          
 music.player.play();

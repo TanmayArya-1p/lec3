@@ -1,3 +1,5 @@
+import { capitalizeName } from "./utils.js";
+
 class Pokemon{
     constructor(code) {
         this.code = code;
@@ -7,7 +9,7 @@ class Pokemon{
     async hydrateData() {
         let res = await fetch("https://pokeapi.co/api/v2/pokemon/"+this.code)
         let json = await res.json()
-        this.name = json.name;
+        this.name = capitalizeName(json.name);
         this.moves = json.moves.map(move => move.move);
         this.height = json.height;
         this.types = json.types.map(type => type.type);

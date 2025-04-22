@@ -53,4 +53,15 @@ async function displaySummaryModal(player,modal=true) {
     }
 }
 
-export { displaySummaryModal }
+function capitalizeName(s) {
+    return s[0].toUpperCase() + s.slice(1).toLowerCase();
+}
+
+
+function dimensionCheck(path) {
+    if (window.innerWidth < window.innerHeight) {
+        window.location.href = "/forbidden.html?"+"back="+path;
+    }
+}
+
+export { displaySummaryModal,dimensionCheck ,capitalizeName}

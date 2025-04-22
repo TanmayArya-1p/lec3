@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéLAN</title>
+    <link rel="stylesheet" href="/home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <script defer>
+        window.addEventListener('resize', function(event) {
+            if ((window.innerWidth > 400 || window.innerHeight > 400) && (window.innerWidth > window.innerHeight)) {
+                window.location.href = window.location.search.split("back=")[1];
+            };
+        }, true);
+    </script>
+    <style>
+        body {
+            background-color: #ff0000;
+            color: white;
+            font-family: 'Pixelify Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #heading {
+            font-family: 'Pixelify Sans', sans-serif;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px #000000;
+        }
+        #retry-button {
+            background-color: #3b4cca;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: 'Pixelify Sans', sans-serif;
+        }
+    </style>
+
+</head>
+<body>
+    <div style="text-align: center;">
+        <h1 id="heading" style="font-size: 2rem;">Device Dimensions Incompatible</h1>
+    </div>
+</body>
+</html>

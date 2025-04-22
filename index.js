@@ -4,8 +4,10 @@ import Pokemon from './pokemon.js';
 import {Music, Pinger} from './music.js';
 import initBanners from './banners.js';
 import { offerReward } from './rewards.js';
-import { displaySummaryModal } from './utils.js';
+import { dimensionCheck, displaySummaryModal } from './utils.js';
 
+
+window.addEventListener('resize' ,()=>dimensionCheck("/"))
 initBanners()
 
 const music = new Music('assets/music.mp3', ["assets/happy.mp3"])

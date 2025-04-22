@@ -32,6 +32,7 @@ class BattlePokemon {
                 break
             }
         }
+        this.pokemon.pp /=2
         this.pokemon.moves = temp;
         this.hydrated = true;
     }
@@ -312,10 +313,6 @@ class BattleSimulator {
             let move = this.homePokemons[this.homeActiveIdx].pokemon.moves[i];
             let attackButton = document.getElementById(`attack-${i+1}`) 
             
-            if(!move.reduced){
-                move.pp = Math.floor(move.pp/2);
-                move.reduced = true
-            }
             if(!move.currPP) {
                 move.currPP = move.pp;
             }
@@ -328,7 +325,6 @@ class BattleSimulator {
             if(move.currPP === 0) {
                 attackButton.disabled = true;
                 attackButton.style.opacity = 0.5;
-                attackButton.style.cursor = "not-allowed";
             } else {
                 attackButton.disabled = false;
                 attackButton.style.opacity = 1;
@@ -487,7 +483,6 @@ class BattleSimulator {
             const attackButton = document.getElementById(`attack-${moveIDX+1}`);
             attackButton.disabled = true;
             attackButton.style.opacity = 0.5;
-            attackButton.style.cursor = "not-allowed";
         }
 
 
@@ -654,7 +649,6 @@ class BattleSimulator {
 
             if(poke.isFainted()) {
                 pokeNode.style.opacity = 0.5;
-                pokeNode.style.cursor = "not-allowed";
             } else{
                 pokeNode.addEventListener('click', () => {
                     if(this.homeActiveIdx == i) {
