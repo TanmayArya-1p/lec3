@@ -372,7 +372,12 @@ class BattleSimulator {
             newNode = document.getElementById('opponent-log-template').cloneNode(true);
         }
         newNode.style.display = "block";
-        newNode.innerHTML = `<strong>${nameMap[issuer]}:</strong> ${message}`;  
+        newNode.innerHTML = "";
+        const strongElem = document.createElement("strong");
+        strongElem.textContent = nameMap[issuer] + ": ";
+        newNode.appendChild(strongElem);
+        const textNode = document.createTextNode(message);
+        newNode.appendChild(textNode);
         this.chatLogContainer.appendChild(newNode);
         this.chatLogContainer.scrollTo(0, this.chatLogContainer.scrollHeight);
         this.chatLog.push(message);
@@ -432,7 +437,11 @@ class BattleSimulator {
             newNode = document.getElementById('opponent-log-template').cloneNode(true);
         }
         newNode.style.display = "block";
-        newNode.innerHTML = `<strong>${nameMap[issuer]}:</strong> ${entry}`;  this.battleLogContainer.appendChild(newNode);
+        const strongElem = document.createElement("strong");
+        strongElem.textContent = nameMap[issuer] + ":";
+        newNode.appendChild(strongElem);
+        newNode.appendChild(document.createTextNode(" " + entry));
+        this.battleLogContainer.appendChild(newNode);
         this.battleLogContainer.scrollTo(0, this.battleLogContainer.scrollHeight);
         this.battleLog.push(entry);
     }
