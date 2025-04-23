@@ -1,5 +1,5 @@
 import { offerReward } from "../rewards.js";
-import { displaySummaryModal } from "../utils.js";
+import { displaySummaryModal, remToPx } from "../utils.js";
 
 class BattlePokemon {
     constructor(pokemon) {
@@ -259,6 +259,9 @@ class BattleSimulator {
         this.enemyActiveIdx = 0
 
         this.enemyMoveCallback = enemyMoveCallback;
+
+
+        window.scrollTo({ top: remToPx(6.5), behavior: 'smooth' });
 
         this.homePokemons = homePokemons.map((pk) =>new BattlePokemon(pk)) 
         this.awayPokemons = awayPokemons.map(pk => new BattlePokemon(pk));

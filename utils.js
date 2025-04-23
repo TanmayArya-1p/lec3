@@ -64,4 +64,8 @@ function dimensionCheck(path) {
     }
 }
 
-export { displaySummaryModal,dimensionCheck ,capitalizeName}
+function remToPx(rem) {    
+    return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+}
+
+export { displaySummaryModal,dimensionCheck ,capitalizeName, remToPx}

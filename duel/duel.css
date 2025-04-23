@@ -65,6 +65,7 @@ body {
     align-items: center;
     background-color: 	#ff0000;
     padding: 10px;
+    height: 4rem;
     color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

@@ -10,7 +10,7 @@ const npcResponseStyles = {
 class NPC {
     constructor(teamSize=teamBattleCount,wait=3000,npcResponse=npcResponseStyles.pureRandomness,name=null,pokemonCodes=null) {
         if(name===null){
-            name = "NPC " + npcNames[Math.floor(Math.random() * npcNames.length)];
+            name = npcNames[Math.floor(Math.random() * npcNames.length)];
         }
         this.pokemonCodes = []
         this.wait = wait
