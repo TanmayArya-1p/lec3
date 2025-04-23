@@ -141,7 +141,6 @@ class RTCPlayer {
     }
     setupDataChannel() {
         this.dataChannel.onopen = () =>{
-            console.log('DATA CHANNEL OPEN')
             if(this.sentLocalHomePlayer) return;
 
             let occludedPlayer = Player.playerOcclusion(this.homePlayer);
@@ -150,24 +149,19 @@ class RTCPlayer {
             this.sentLocalHomePlayer = true;
         };  
         this.dataChannel.onmessage = (e) => {
-            console.log('RECV:', e)
             if (!this.player) {
                 this.player = JSON.parse(e.data);
-                console.log("SYNCING" ,this.player);
                 if(this.isOfferer) {
                     switch (this.player.arenaIDX) {
                         case 0:
-                            console.log("ARENA 0")
                             document.getElementById('battle-bg').src = "../assets/battle.gif";
                             break;
                         case 1:
-                            console.log("ARENA 1")
                             document.getElementById('battle-bg').src = "../assets/battle-2.png";
                             break;
                     }
                     this.player.arenaIDX= -1
                 }
-                console.log('Player data received:', this.player);
                 this.player.isRTC = true
                 this.player.rtcSend = (data => this.send(data));
                 initiateRTCBattle(this,this.music,this.pinger)

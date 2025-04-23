@@ -403,7 +403,6 @@ class BattleSimulator {
         this.homePlayerCard.querySelector('img').alt = player.char;
         this.homePlayerCard.querySelector('h2').innerText = player.nick;
         if(this.awayPlayer.isRTC && this.awayPlayer.arenaIDX === -1) {
-            console.log("SKIPPED LOCAL ARENA SYNC")
             return;
         }
 
@@ -671,7 +670,6 @@ class BattleSimulator {
         let p1PokeList = document.getElementById('player-1-pokelist');
         let p2PokeList = document.getElementById('player-2-pokelist');
 
-        console.log("INTI POKE LIST CALLED")
 
         let p1PokeButtonTemplate = document.getElementById("pkg-selector-template")
         let p2PokeButtonTemplate = document.getElementById("pkg-selector-template-enemy")

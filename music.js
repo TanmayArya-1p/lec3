@@ -47,7 +47,6 @@ class Music {
     }
     preloadNonDefaults() {
         this.nonDefaults.forEach((src) => {
-            console.log(`PRELOADING ${src}`);
             const audio = document.createElement('audio');
             audio.src = src;
             audio.preload = 'auto';
