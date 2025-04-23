@@ -812,20 +812,26 @@ class BattleSimulator {
             ctx.fillText("", this.canvas.width / 2, 60);
         }
 
-
+        const hpBarImg = new Image();
+        hpBarImg.src = "../assets/hpbar.png";
+        hpBarImg.onload = () => {
+            ctx.drawImage(hpBarImg, 260, this.canvas.height - 167, 100, 80);
+            ctx.drawImage(hpBarImg, this.canvas.width - 334, 213, 100, 80);
+        };
 
         ctx.fillStyle = 'red';
         ctx.fillRect(270, this.canvas.height - 100, 80, 5);
         ctx.fillStyle = 'green';
         ctx.fillRect(270, this.canvas.height - 100, (this.homePokemons[this.homeActiveIdx].hp / this.homePokemons[this.homeActiveIdx].pokemon.stats.hp) * 80, 5);
+        
 
         ctx.fillStyle = 'black';
         ctx.font = '20px Pixelify Sans';
-        ctx.fillText(`HP (${this.homePokemons[this.homeActiveIdx].hp} / ${this.homePokemons[this.homeActiveIdx].pokemon.stats.hp})`, 150, this.canvas.height - 92);
+        ctx.fillText(`HP (${this.homePokemons[this.homeActiveIdx].hp} / ${this.homePokemons[this.homeActiveIdx].pokemon.stats.hp})`, 180, this.canvas.height - 92);
         
         ctx.fillStyle = 'black';
         ctx.font = '20px Pixelify Sans';
-        ctx.fillText(this.homePokemons[this.homeActiveIdx].pokemon.name, 150, this.canvas.height - 60);
+        ctx.fillText(this.homePokemons[this.homeActiveIdx].pokemon.name, 180, this.canvas.height - 60);
 
 
         ctx.fillStyle = 'red';
@@ -835,11 +841,11 @@ class BattleSimulator {
 
         ctx.fillStyle = 'black';    
         ctx.font = '20px Pixelify Sans';
-        ctx.fillText(`HP (${this.awayPokemons[this.enemyActiveIdx].hp} / ${this.awayPokemons[this.enemyActiveIdx].pokemon.stats.hp})`, this.canvas.width - 440  , 288);  
+        ctx.fillText(`HP (${this.awayPokemons[this.enemyActiveIdx].hp} / ${this.awayPokemons[this.enemyActiveIdx].pokemon.stats.hp})`, this.canvas.width - 410  , 288);  
 
         ctx.fillStyle = 'black';
         ctx.font = '20px Pixelify Sans';
-        ctx.fillText(this.awayPokemons[this.enemyActiveIdx].pokemon.name, this.canvas.width - 440 , 320);
+        ctx.fillText(this.awayPokemons[this.enemyActiveIdx].pokemon.name, this.canvas.width - 410 , 320);
 
         this.initPokeList()
         return 0;
