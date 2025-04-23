@@ -348,9 +348,24 @@ class BattleSimulator {
         if(this.isHomeTurn) {
             this.turnDisplay.innerText = "Your Turn";
             this.turnDisplay.style.color = "#3b4cca";
+            for(let i= 0; i<4; i++){
+                let butt = document.getElementById(`attack-${i+1}`)
+                if(this.homePokemons[this.homeActiveIdx].isFainted()) {
+                    butt.style.opacity = 0.5;
+                    butt.disabled = true;
+                } else {
+                    butt.style.opacity = 1;
+                    butt.disabled = false;
+                }
+            }
         } else {
             this.turnDisplay.innerText = `Opponent's Turn`;
             this.turnDisplay.style.color = "#ff0000";
+            for(let i=0 ; i<4; i++){
+                let butt = document.getElementById(`attack-${i+1}`)
+                butt.style.opacity = 0.5;
+                butt.disabled = true;
+            }
         }
     }
 
@@ -457,12 +472,7 @@ class BattleSimulator {
             console.error("WRONG TURN");
             return;
         }
-        if(!switchpkg) {
-            this.awayPokemonImage.classList.add("pokemon-image-shake")
-            setTimeout(() => {
-                this.awayPokemonImage.classList.remove("pokemon-image-shake")
-            }, 500);    
-        }
+
         if(switchpkg) {
             let faintflag = true
             if(!this.homePokemons[this.homeActiveIdx].isFainted()) {
@@ -482,6 +492,12 @@ class BattleSimulator {
         }
         if(this.homePokemons[this.homeActiveIdx].isFainted()) {
             return;
+        }
+        if(!switchpkg) {
+            this.awayPokemonImage.classList.add("pokemon-image-shake")
+            setTimeout(() => {
+                this.awayPokemonImage.classList.remove("pokemon-image-shake")
+            }, 500);    
         }
 
         const damage = this.homePokemons[this.homeActiveIdx].attack(this.awayPokemons[this.enemyActiveIdx], this.homePokemons[this.homeActiveIdx].pokemon.moves[moveIDX]);
