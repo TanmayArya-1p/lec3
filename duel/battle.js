@@ -262,6 +262,8 @@ class BattleSimulator {
 
         this.homePokemons = homePokemons.map((pk) =>new BattlePokemon(pk)) 
         this.awayPokemons = awayPokemons.map(pk => new BattlePokemon(pk));
+        this.homePokemons[0].isDeployed = true
+        this.awayPokemons[0].isDeployed = true
 
         this.npc = npc;
         this.battleSimBox = document.getElementById('battle-sim');
@@ -598,7 +600,8 @@ class BattleSimulator {
             console.error("POKEMON FAINTED");
             return;
         }
-        
+        this.homePokemons[idx].isDeployed = true;
+
         this.homeActiveIdx = idx;
 
 
@@ -617,6 +620,8 @@ class BattleSimulator {
         }
         this.initMoves()
         this.draw();
+
+
     }
     async AwaySwitchPokemon(idx) {
 
@@ -624,6 +629,8 @@ class BattleSimulator {
             console.error("POKEMON FAINTED");
             return;
         }
+        this.awayPokemons[idx].isDeployed = true;
+
         this.enemyActiveIdx = idx;
 
         this.awayPokemonImage.src = this.awayPokemons[this.enemyActiveIdx].pokemon.sprites.other.showdown.front_default;
@@ -639,8 +646,11 @@ class BattleSimulator {
         let p1PokeList = document.getElementById('player-1-pokelist');
         let p2PokeList = document.getElementById('player-2-pokelist');
 
+        console.log("INTI POKE LIST CALLED")
+
         let p1PokeButtonTemplate = document.getElementById("pkg-selector-template")
         let p2PokeButtonTemplate = document.getElementById("pkg-selector-template-enemy")
+
 
         while (p1PokeList.children.length > 1) {
             p1PokeList.removeChild(p1PokeList.lastChild);
@@ -656,6 +666,11 @@ class BattleSimulator {
             pokeNode.querySelector('.pkg-selector-name').innerText = poke.pokemon.name;
             pokeNode.querySelector('.pkg-selector-img').src = poke.pokemon.sprites.front_default;
             pokeNode.querySelector('.pkg-selector-hp').innerText = "HP: "+poke.hp;
+            if(this.homePokemons[i].isDeployed) {
+                pokeNode.querySelector('.pkg-pokeball-img').src = "/assets/pokeball-open.png"
+            } else {
+                pokeNode.querySelector('.pkg-pokeball-img').src = "/assets/pokeball-close.png"
+            }
 
             if(poke.isFainted()) {
                 pokeNode.style.opacity = 0.5;
@@ -678,6 +693,11 @@ class BattleSimulator {
             pokeNode.querySelector('.pkg-selector-name').innerText = poke.pokemon.name;
             pokeNode.querySelector('.pkg-selector-img').src = poke.pokemon.sprites.front_default;
             pokeNode.querySelector('.pkg-selector-hp').innerText = "HP: "+ poke.hp;
+            if(this.awayPokemons[i].isDeployed) {
+                pokeNode.querySelector('.pkg-pokeball-img').src = "/assets/pokeball-open.png"
+            } else {
+                pokeNode.querySelector('.pkg-pokeball-img').src = "/assets/pokeball-close.png"
+            }
             p2PokeList.appendChild(pokeNode);
         }
     }
@@ -773,17 +793,13 @@ class BattleSimulator {
         //     }
         //     ctx.drawImage(awayImg, this.canvas.width - 364, 150, 150, 150);
         // }); 
+        ctx.fillStyle = 'black';
+        ctx.font = 'bold 24px Pixelify Sans';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
         if (this.battleLog.length > 0) {
-            ctx.fillStyle = 'black';
-            ctx.font = 'bold 24px Pixelify Sans';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
             ctx.fillText(this.battleLog[this.battleLog.length - 1], this.canvas.width / 2, 60);
         } else{
-            ctx.fillStyle = 'black';
-            ctx.font = 'bold 24px Pixelify Sans';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
             ctx.fillText("", this.canvas.width / 2, 60);
         }
 
