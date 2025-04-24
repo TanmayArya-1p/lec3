@@ -800,25 +800,6 @@ class BattleSimulator {
         const ctx = this.canvas.getContext('2d');
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-
-
-        // const homeImg = new Image();
-        // homeImg.src = this.homePokemon.pokemon.sprites.back_default;
-        // homeImg.addEventListener('load', () => {
-        //     if(this.concluded) {
-        //         return;
-        //     }
-        //     ctx.drawImage(homeImg, 230, this.canvas.height - 240, 150, 150);
-        // });
-
-        // const awayImg = new Image();
-        // awayImg.src = this.awayPokemon.pokemon.sprites.front_default;
-        // awayImg.addEventListener('load', () => {
-        //     if(this.concluded) {
-        //         return;
-        //     }
-        //     ctx.drawImage(awayImg, this.canvas.width - 364, 150, 150, 150);
-        // }); 
         ctx.fillStyle = 'black';
         ctx.font = 'bold 24px Pixelify Sans';
         ctx.textAlign = 'center';

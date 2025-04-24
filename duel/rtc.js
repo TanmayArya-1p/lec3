@@ -59,15 +59,6 @@ class RTCPlayer {
     }
 
     setupDOMListeners() {
-        // document.getElementById('create-offer').addEventListener('click', async () => {
-        //     this.isOfferer = true;
-        //     this.dataChannel = this.peerConnection.createDataChannel('game');
-        //     this.setupDataChannel();
-            
-        //     const offer = await this.createOffer();
-        //     document.getElementById('local-sdp').value = (offer.sdp);
-        // });
-
         document.getElementById('set-remote').addEventListener('click', async () => {
             const remoteSdp = atob(document.getElementById('remote-sdp').value);
             await this.setRemoteDescription({
