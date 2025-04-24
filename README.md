@@ -3,7 +3,7 @@ A Pokémon Showdown esque game with p2p Multiplayer using WebRTC.
 
 Hosted at [pokelan.vercel.app](https://pokelan.vercel.app)
 
-
+![demo](/assets/demo.png)
 
 ## Self-Hosting:
 

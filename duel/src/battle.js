@@ -248,7 +248,6 @@ let bsInUse = false;
 class BattleSimulator {
     constructor(homePokemons, awayPokemons , canvasID,music,pinger,npc=null,enemyMoveCallback=null,homeMoveHook=null,endGameCallback=null) {
         if(bsInUse) {
-            console.error("BATTLE SIMULATOR ALREADY IN USE");
             return;
         }
         bsInUse = true;
@@ -471,7 +470,6 @@ class BattleSimulator {
     attackAway(moveIDX,switchpkg) {
 
         if(!this.isHomeTurn || this.concluded) {
-            console.error("WRONG TURN");
             return;
         }
 
@@ -574,7 +572,6 @@ class BattleSimulator {
 
     attackHome(moveIDX,damage=null,switchpkg=false) {
         if(this.isHomeTurn || this.concluded) {
-            console.error("WRONG TURN");
             return;
         }
         if(!switchpkg) {
@@ -624,7 +621,6 @@ class BattleSimulator {
 
     async HomeSwitchPokemon(idx) {
         if(this.homePokemons[idx].isFainted()) {
-            console.error("POKEMON FAINTED");
             return;
         }
         this.homePokemons[idx].isDeployed = true;
@@ -653,7 +649,6 @@ class BattleSimulator {
     async AwaySwitchPokemon(idx) {
 
         if(this.awayPokemons[idx].isFainted()) {
-            console.error("POKEMON FAINTED");
             return;
         }
         this.awayPokemons[idx].isDeployed = true;
