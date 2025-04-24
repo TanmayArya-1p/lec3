@@ -1,9 +1,8 @@
-import Player from "../player.js"
+import Player from "../../src/player.js"
 import { initNavbar } from "./navbar.js";
-import {Music, Pinger} from '../music.js';
+import {Music, Pinger} from '../../src/music.js';
 import { startNPCBattle } from "./npc.js";
-import { offerReward } from "../rewards.js";
-import { displaySummaryModal ,dimensionCheck} from "../utils.js";
+import { displaySummaryModal ,dimensionCheck} from "../../src/utils.js";
 import {RTCPlayer, initiateRTCBattle} from "./rtc.js";
 
 dimensionCheck("/duel")

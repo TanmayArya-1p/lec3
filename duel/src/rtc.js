@@ -1,6 +1,6 @@
 import { BattleSimulator } from "./battle.js";
-import {teamBattleCount} from '../consts.js';
-import Player from '../player.js';
+import {teamBattleCount} from '../../src/consts.js';
+import Player from '../../src/player.js';
 
 class RTCPlayer {
     constructor(homePlayer,music,pinger,moveMakeCallback=null) {

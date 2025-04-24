@@ -1,5 +1,5 @@
-import { offerReward } from "../rewards.js";
-import { displaySummaryModal, remToPx } from "../utils.js";
+import { offerReward } from "../../src/rewards.js";
+import { displaySummaryModal, remToPx } from "../../src/utils.js";
 
 class BattlePokemon {
     constructor(pokemon) {

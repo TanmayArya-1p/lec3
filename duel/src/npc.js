@@ -1,7 +1,7 @@
-import Player from '../player.js';
-import {ASH,GARY,trainerList,npcNames,offsetMap,teamBattleCount} from "../consts.js";
+import Player from '../../src/player.js';
+import {ASH,GARY,trainerList,npcNames,offsetMap,teamBattleCount} from "../../src/consts.js";
 import {BattleSimulator} from "./battle.js";
-import Pokemon from '../pokemon.js';
+import Pokemon from '../../src/pokemon.js';
 
 const npcResponseStyles = {
     "pureRandomness" : (moves) => Math.floor(Math.random() * moves.length),

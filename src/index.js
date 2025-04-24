@@ -1,6 +1,4 @@
 import Player from './player.js';
-import {ASH, GARY} from './consts.js';
-import Pokemon from './pokemon.js';
 import {Music, Pinger} from './music.js';
 import initBanners from './banners.js';
 import { offerReward } from './rewards.js';

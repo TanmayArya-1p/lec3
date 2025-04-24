@@ -1,5 +1,5 @@
-import {ASH,GARY,offsetMap} from "../consts.js";
-import Pokemon from "../pokemon.js";
+import {ASH,GARY,offsetMap} from "./consts.js";
+import Pokemon from "./pokemon.js";
 
 async function offerReward(player,callback=null) {
     player.xp += 50;

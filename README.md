@@ -30,6 +30,7 @@ Apart from this, for Self-Hosting feel free to configure your own `STUN` servers
     - `homeMoveCallback` - called everytime the home player makes a move (useful for syncing moves between remote clients).
     - `endGameCallback` - called when the game concludes and can be used for cleanup functionalities.
 
-This allows you to inject custom logic for the AwayPlayer. For example, to implement an NPC, simply provide a `enemyMoveCallback` function to the BattleSimulator that will be invoked at each of its turns to decide the move. Similarly, `RTCPlayer` can be directly integrated into `BattleSimulator` by supplying its move function as a hook.
- 
+- This allows you to inject custom logic for the AwayPlayer. For example, to implement an NPC, simply provide a `enemyMoveCallback` function to the BattleSimulator that will be invoked at each of its turns to decide the move. 
+- Similarly, `RTCPlayer` can be directly integrated into `BattleSimulator` by supplying its move function as a hook and calling the functions of `BattleSimulator` to replicate the moves of the remote player.
+
 
